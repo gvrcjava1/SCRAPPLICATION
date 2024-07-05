@@ -1,0 +1,158 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+
+<div class="content container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="breadcrumb-section">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+                        <li class="breadcrumb-item"><a [routerLink]="['/drives']">Drives </a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Drives</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="clear"> </div>
+            <div class="row-fluid">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Drives Information</div>
+                    <div class="panel-body">
+                        <div id="forms" class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">{{title}} {{Titles.DRIVE_CATEGORY_FORM}}</div>
+                                <div class="panel-body">
+                                    <div class="p-24">
+                                        <div fxLayout="column" fxLayoutAlign="start start" fxLayout.gt-md="row">
+
+                                            <form class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24"
+                                                fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto" name="form"
+                                                [formGroup]="addDriveCategoryFormGroup" (ngSubmit)="onAddDriveCategoryFormSubmit();">
+
+                                                <div class="col-md-12">
+
+                                                    <!-- NAME -->
+                                                    <div class="col-md-3">
+                                                        <mat-form-field fxFlex="30">
+                                                            <input matInput placeholder="{{FiledLabels.NAME}}"
+                                                                [formControl]="addDriveCategoryFormGroup.controls['name']"
+                                                                oninput="this.value = this.value.toUpperCase()"
+                                                                required pattern="^[a-zA-Z0-9,\s._-]+(\s[a-zA-Z0-9,._-]+)?$">
+                                                            <mat-error
+                                                                *ngIf="addDriveCategoryFormGroup.controls['name'].hasError('required') && addDriveCategoryFormGroup.controls['name'].touched"
+                                                                class="alert alert-danger">Enter Name</mat-error>                                                           
+                                                            <mat-error
+                                                                *ngIf="addDriveCategoryFormGroup.controls['name'].hasError('pattern') && addDriveCategoryFormGroup.controls['name'].touched"
+                                                                class="alert alert-danger">Special characters are not allowed
+                                                            </mat-error>
+                                                            <mat-error
+                                                            *ngIf="addDriveCategoryFormGroup.controls['name'].hasError('maxlength') && addDriveCategoryFormGroup.controls['name'].touched"
+                                                            class="alert alert-danger">Max 250 characters only
+                                                        </mat-error>
+                                                            <mat-error
+                                                            *ngIf="addDriveCategoryFormGroup.controls['name'].hasError('duplicateName')"
+                                                            class="alert alert-danger">
+                                                            Name Already Exists
+                                                          </mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+
+                                                    <!-- DESCRIPTION -->
+                                                    <div class="col-md-3">
+                                                        <mat-form-field fxFlex="30">
+                                                            <textarea textareaAutoresize matInput placeholder="{{FiledLabels.DESCRIPTION}}"
+                                                                [formControl]="addDriveCategoryFormGroup.controls['description']"
+                                                                oninput="this.value = this.value.toUpperCase()"
+                                                                required pattern="^[a-zA-Z0-9,\s._-]+(\s[a-zA-Z0-9,._-]+)?$"></textarea>
+                                                            <mat-error
+                                                                *ngIf="addDriveCategoryFormGroup.controls['description'].hasError('required') && addDriveCategoryFormGroup.controls['description'].touched"
+                                                                class="alert alert-danger">Enter Description</mat-error>
+                                                            <mat-error
+                                                                *ngIf="addDriveCategoryFormGroup.controls['description'].hasError('pattern') && addDriveCategoryFormGroup.controls['description'].touched"
+                                                                class="alert alert-danger">Special characters are not allowed
+                                                            </mat-error>
+                                                            <mat-error
+                                                                *ngIf="addDriveCategoryFormGroup.controls['description'].hasError('maxlength') && addDriveCategoryFormGroup.controls['description'].touched"
+                                                                class="alert alert-danger">Max 250 characters only
+                                                            </mat-error>
+                                                            <mat-error
+                                                            *ngIf="addDriveCategoryFormGroup.controls['description'].hasError('duplicateDescription')"
+                                                            class="alert alert-danger">
+                                                            Description Already Exists
+                                                          </mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <!-- FROM DATE -->
+                                                    <div class="col-md-3">
+                                                        <mat-form-field>
+                                                            <input matInput [matDatepicker]="picker1"
+                                                                placeholder="{{FiledLabels.FROM_DATE}}"
+                                                                (dateChange)="addEvent($event)" 
+                                                                [formControl]="addDriveCategoryFormGroup.controls['fromDate']" >
+                                                            <mat-datepicker-toggle matSuffix [for]="picker1">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #picker1></mat-datepicker>
+                                                           
+                                                        </mat-form-field>
+                                                    </div>    
+
+                                                    <!-- TO DATE -->
+                                                    <div class="col-md-3">
+                                                        <mat-form-field>
+                                                            <input matInput [matDatepicker]="picker2"
+                                                                placeholder="{{FiledLabels.TO_DATE}}"
+                                                                [min]="toMinDate"
+                                                                [formControl]="addDriveCategoryFormGroup.controls['toDate']" >
+                                                            <mat-datepicker-toggle matSuffix [for]="picker2">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #picker2></mat-datepicker>
+                                                        </mat-form-field>
+                                                    </div>  
+                                                    <div class="clearfix"></div>
+                                                    <!-- Authority -->
+                                                    <div class="col-md-3">
+                                                        <mat-form-field fxFlex="30">
+                                                            <input matInput placeholder="{{FiledLabels.AUTHORITY}}"
+                                                                [formControl]="addDriveCategoryFormGroup.controls['authority']">  
+                                                                <mat-error
+                                                                *ngIf="addDriveCategoryFormGroup.controls['authority'].hasError('maxlength') && addDriveCategoryFormGroup.controls['authority'].touched"
+                                                                class="alert alert-danger">Max 250 characters only
+                                                            </mat-error>                                                          
+                                                        </mat-form-field>
+                                                    </div>
+                                                <div class="clearfix"></div>
+                                                <div class="col-md-3 mt-15">
+                                                    <div class="float-right" style="float: right;">
+                                                        <button class="mat-raised-button mat-accent" color="accent"
+                                                            class="d-inline" mat-raised-button="" type="submit"
+                                                            [disabled]="addDriveCategoryFormGroup.invalid" *ngIf="save">
+                                                            {{title}}
+                                                        </button>
+                                                       
+                                                        <button class="mat-raised-button mat-accent  d-inline"
+                                                            color="accent"  mat-raised-button="" 
+                                                             [disabled]="addDriveCategoryFormGroup.invalid"
+                                                            *ngIf="update">
+                                                            {{title}}
+                                                        </button>&nbsp;&nbsp;
+                                                        <span class="mat-raised-button mat-accent d-inline"
+                                                            (click)="onGoBack()" color="warn" mat-raised-button="">
+                                                            Back
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

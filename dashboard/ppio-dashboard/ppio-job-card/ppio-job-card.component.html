@@ -1,0 +1,801 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="content container-fluid">
+	<div class="row">
+		<div class="col-12">
+			<div class="breadcrumb-section">
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>						
+						<li class="breadcrumb-item active" aria-current="page">Update Section Job Card</li>
+					</ol>
+				</nav>
+			</div>
+
+			<div class="clear"></div>
+			<div class="row-fluid">
+				<div class="panel panel-primary">
+					<div class="panel-heading">{{Titles.UPDATE_SECTION_JOBCARD}}</div>
+					<div class="panel-body">
+						<div id="forms" class="page-layout simple fullwidth"
+							fxLayout="column" fusePerfectScrollbar>
+							
+							<div class="col-md-3" >                            	
+                                <mat-form-field fxFlex="30">
+                                    <input matInput autocomplete="off"  placeholder="{{FiledLabels.LOCO}}"
+                                    [(ngModel)]="loco"readonly/>                                      
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-md-3" >                            	
+                                <mat-form-field fxFlex="30">
+                                    <input matInput autocomplete="off"  placeholder="{{FiledLabels.SCHEDULE}}"
+                                    [(ngModel)]="schedule"readonly/>                                      
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-md-3" >                            	
+                                <mat-form-field fxFlex="30">
+                                    <input matInput autocomplete="off"  placeholder="{{FiledLabels.ENGG_SECTION}}"
+                                    [(ngModel)]="engineeringSection"readonly/>                                      
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-md-3" >                            	
+                                <mat-form-field fxFlex="30">
+                                    <input matInput autocomplete="off"  placeholder="{{FiledLabels.DATE_CREATED}}"
+                                    [(ngModel)]="dateCreated"readonly/>                                      
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-md-3" >                            	
+                                <mat-form-field fxFlex="30">
+                                    <input matInput autocomplete="off"  placeholder="{{FiledLabels.CREATED_BY}}"
+                                    [(ngModel)]="createdBy"readonly/>                                      
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-md-3" >                            	
+                                <mat-form-field fxFlex="30">
+                                    <input matInput autocomplete="off"  placeholder="{{FiledLabels.TESTED_BY1}}"
+                                    [(ngModel)]="testedBy1"readonly/>                                      
+                                  </mat-form-field>
+                            </div>                           
+                            <div class="col-md-3" >                            	
+                                <mat-form-field fxFlex="30">
+                                    <input matInput autocomplete="off"  placeholder="{{FiledLabels.DATE_ISSUED}}"
+                                    [(ngModel)]="dateIssued"readonly/>                                      
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-md-3" >                            	
+                                <mat-form-field fxFlex="30">
+                                    <input matInput autocomplete="off"  placeholder="{{FiledLabels.ISSUED_BY}}"
+                                    [(ngModel)]="issuedBy"readonly/>                                      
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-md-3" >                            	
+                                <mat-form-field fxFlex="30">
+                                    <input matInput autocomplete="off"  placeholder="{{FiledLabels.TESTED_BY2}}"
+                                    [(ngModel)]="testedBy2"readonly/>                                      
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-md-3" >                            	
+                                <mat-form-field fxFlex="30">
+                                    <input matInput autocomplete="off"  placeholder="{{FiledLabels.REMARKS}}"
+                                    [(ngModel)]="remarks"/>                                      
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-md-3" >                            	
+                                <mat-form-field fxFlex="30">                                                                        
+                                <input matInput [owlDateTime]="dt1" style="width: 94%;" autocomplete="off" (keypress)="false" decimalNumber
+                                [owlDateTimeTrigger]="dt1" placeholder="{{FiledLabels.TARGET_TIME}}"                                                                
+                                  [max]="maxDate"                                 
+                                  [(ngModel)]="targetDate"   >                                                                
+                                <owl-date-time #dt1 [showSecondsTimer]=true
+                                    ></owl-date-time>
+                                <span [owlDateTimeTrigger]="dt1"><i class="fa fa-calendar"></i></span>
+                                  
+                            </mat-form-field>
+                            </div>
+                            <div class="col-md-3" > 
+                                <mat-form-field fxFlex="30">                                                      
+                                    <input matInput [owlDateTime]="dt2" style="width: 94%;"
+                                      [owlDateTimeTrigger]="dt2" placeholder="{{FiledLabels.UPDATED_ON}}"                                                                                                    
+                                      [max]="maxDate"   
+                                      [(ngModel)]="updatedOn"
+                                       >                                                                
+                                      <owl-date-time #dt2 [showSecondsTimer]=true
+                                          ></owl-date-time>
+                                      <span [owlDateTimeTrigger]="dt2"><i class="fa fa-calendar"></i></span>                                                              
+                                </mat-form-field>                             	
+                               
+                            </div>
+                            <div class="col-md-3" > 
+                                 <mat-form-field fxFlex="30">
+                                    <mat-select  [(ngModel)] = "returnedBy" placeholder="{{FiledLabels.RETURNED_BY}}" > 
+                                        <mat-option
+                                        *ngFor="let employee of employeeList"
+                                        [value]="employee.empFirstName">
+                                        {{ employee.empFirstName}}
+                                        </mat-option>
+                                    </mat-select>                                                           
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3" >                            	
+                                <mat-form-field fxFlex="30">
+                                    <mat-select  [(ngModel)] = "status" placeholder="{{FiledLabels.STATUS}}" > 
+                                        <mat-option
+                                            *ngFor="let status of statusList"
+                                            [value]="status.statusCode">
+                                            {{ status.statusCode }}
+                                        </mat-option>
+                                    </mat-select>                                                           
+                                </mat-form-field>
+                            </div>
+                            
+							<button mat-raised-button color="primary" (click)="toggleExpansion()" *ngIf="enableExpand">Expand<mat-icon>expand_more</mat-icon></button>
+										<button mat-raised-button color="primary" (click)="toggleExpansion()" *ngIf="enableCollapse">Collapse<mat-icon>expand_less</mat-icon></button>
+							<div class="clear"> </div>
+							<mat-accordion multi="true" >
+							<mat-expansion-panel [expanded]="isOpen"  *ngFor="let part of jobCardActivityCategoryList " >
+									<mat-expansion-panel-header [ngStyle]="{'color': 'red'}" >
+											<mat-panel-title >
+												<p   [ngStyle]="{'color': part.statusItemAttribute1}" ><b>{{part.statusItemCode}}</b></p>
+											</mat-panel-title>
+											<mat-panel-description>
+												<p [ngStyle]="{'color': part.statusItemAttribute1 }"  *ngIf=" ACTIVITY_CATEGORY.FAILURES == part.statusItemCode">Count : {{onlineFailuresLength}}</p>
+												<p [ngStyle]="{'color': part.statusItemAttribute1 }"  *ngIf=" ACTIVITY_CATEGORY.OBSERVATIONS == part.statusItemCode">Count : {{ObsLength}}</p>
+												<p [ngStyle]="{'color': part.statusItemAttribute1 }"  *ngIf=" ACTIVITY_CATEGORY.ABNORMALITY == part.statusItemCode">Count : {{abnormalityLength}}</p>
+												<p [ngStyle]="{'color': part.statusItemAttribute1 }"  *ngIf=" ACTIVITY_CATEGORY.SCHEDULE_ITEMS == part.statusItemCode">Count : {{insCheckListLength}}</p>
+												<p [ngStyle]="{'color': part.statusItemAttribute1 }"  *ngIf=" ACTIVITY_CATEGORY.MEMOS == part.statusItemCode">Count : {{memosLength}}</p>
+												<p [ngStyle]="{'color': part.statusItemAttribute1 }"  *ngIf=" ACTIVITY_CATEGORY.RAP == part.statusItemCode">Count : </p>
+											</mat-panel-description>
+									</mat-expansion-panel-header>
+									<div class = "p-24">
+		                                <mat-tab-group (selectedIndexChange)="checkTab($event)">
+		                                    <mat-tab [label]="label1" >
+									 	 <div class="mat-elevation-z8" *ngIf=" ACTIVITY_CATEGORY.FAILURES == part.statusItemCode" >
+		                                    <mat-table [dataSource]="onlineFailuresDataSource" matSort>
+		                                      <!-- <ng-container matColumnDef="sno">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.S_NO}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row"> {{row.sno}}</mat-cell>
+		                                  </ng-container> -->
+		                                  <ng-container matColumnDef="assetType">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.EQUIPMENT}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row"> 
+		                                        <mat-form-field fxFlex="30">
+		                                            <mat-select [(ngModel)] = "row.assetType" >													
+		                                                <mat-option
+		                                                    *ngFor="let equipment of equipmentsList"
+		                                                    [value]="equipment.assetType">
+		                                                    {{ equipment.assetType}}
+		                                                </mat-option>
+		                                            </mat-select>
+		                                        </mat-form-field>   
+		                                    </mat-cell>
+		                                </ng-container>
+		                                    <ng-container matColumnDef="position">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                          <span>{{FiledLabels.POSITION}}</span>
+		                                      </mat-header-cell>
+		                                      <mat-cell *matCellDef="let row"> 
+		                                        <mat-form-field fxFlex="30">
+		                                            <mat-select [(ngModel)] = "row.position" >													
+		                                                <mat-option
+		                                                    *ngFor="let assetType of equipmentsList"
+		                                                    [value]="assetType.subAssetPosition">
+		                                                    {{ assetType.subAssetPosition}}
+		                                                </mat-option>
+		                                            </mat-select>
+		                                        </mat-form-field> 
+		                                      </mat-cell>
+		                                  </ng-container>
+		                                   <ng-container matColumnDef="serialNumber">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                          <span>{{FiledLabels.SERIAL_NO}}</span>
+		                                      </mat-header-cell>
+		                                      <mat-cell *matCellDef="let row">
+		                                            <mat-form-field fxFlex="30">
+		                                        <mat-select [(ngModel)] = "row.position" >													
+		                                            <mat-option
+		                                                *ngFor="let assetType of assetTypeList"
+		                                                [value]="assetType">
+		                                                {{ assetType}}
+		                                            </mat-option>
+		                                        </mat-select>
+		                                    </mat-form-field> </mat-cell>
+		                                  </ng-container>
+		                                  <ng-container matColumnDef="observation">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                      <span>{{FiledLabels.OBSERVATION}}</span>
+		                                  </mat-header-cell>
+		                                  <mat-cell *matCellDef="let row"> {{row.observations}}</mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="kind">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                      <span>{{FiledLabels.KIND}}</span>
+		                                  </mat-header-cell>
+		                                  <mat-cell *matCellDef="let row"> {{row.kind}}</mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="assignedTo">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.ASSIGNED_TO}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                          <mat-form-field fxFlex="30">
+		                                      <mat-select [(ngModel)] = "row.assignedTo" >													
+		                                          <mat-option
+		                                              *ngFor="let employee of employeeList"
+		                                              [value]="employee.empFirstName">
+		                                              {{ employee.empFirstName}}
+		                                          </mat-option>
+		                                      </mat-select>
+		                                  </mat-form-field> </mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="compliance">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.COMPLIANCE}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                          <mat-form-field fxFlex="30">
+		                                      <mat-select [(ngModel)] = "row.compliance" >													
+		                                          <mat-option
+		                                          *ngFor="let status of complianceList"
+		                                          [value]="status.statusCode">
+		                                          {{ status.statusCode }}
+		                                          </mat-option>
+		                                      </mat-select>
+		                                  </mat-form-field> </mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="workDone">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.WORK_DONE}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                        <mat-form-field fxFlex="30">
+		                                            <input matInput   [value]="row.workDone"  autocomplete="off" 
+		                                            	[(ngModel)]="row.workDone" >
+		                                        </mat-form-field>
+		                                     </mat-cell>
+		                                </ng-container> 
+		                               
+		                                      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		                                      <mat-row *matRowDef="let row; columns: displayedColumns;">
+		                                      </mat-row>
+		                                    </mat-table> 
+		                                                                      
+		                                    </div>
+		                                    <div class="mat-elevation-z8" *ngIf=" ACTIVITY_CATEGORY.OBSERVATIONS == part.statusItemCode">
+		                                    <mat-table [dataSource]="observationdataSource" matSort>
+		                                     <!--  <ng-container matColumnDef="sno">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.S_NO}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row"> {{row.sno}}</mat-cell>
+		                                  </ng-container> -->
+		                                  <ng-container matColumnDef="assetType">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.EQUIPMENT}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row"> 
+		                                        <mat-form-field fxFlex="30">
+		                                            <mat-select [(ngModel)] = "row.assetType" >													
+		                                                <mat-option
+		                                                    *ngFor="let equipment of equipmentsList"
+		                                                    [value]="equipment.assetType">
+		                                                    {{ equipment.assetType}}
+		                                                </mat-option>
+		                                            </mat-select>
+		                                        </mat-form-field>   
+		                                    </mat-cell>
+		                                </ng-container>
+		                                    <ng-container matColumnDef="position">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                          <span>{{FiledLabels.POSITION}}</span>
+		                                      </mat-header-cell>
+		                                      <mat-cell *matCellDef="let row"> 
+		                                        <mat-form-field fxFlex="30">
+		                                            <mat-select [(ngModel)] = "row.position" >													
+		                                                <mat-option
+		                                                    *ngFor="let assetType of equipmentsList"
+		                                                    [value]="assetType.subAssetPosition">
+		                                                    {{ assetType.subAssetPosition}}
+		                                                </mat-option>
+		                                            </mat-select>
+		                                        </mat-form-field> 
+		                                      </mat-cell>
+		                                  </ng-container>
+		                                   <ng-container matColumnDef="serialNumber">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                          <span>{{FiledLabels.SERIAL_NO}}</span>
+		                                      </mat-header-cell>
+		                                      <mat-cell *matCellDef="let row">
+		                                            <mat-form-field fxFlex="30">
+		                                        <mat-select [(ngModel)] = "row.position" >													
+		                                            <mat-option
+		                                                *ngFor="let assetType of assetTypeList"
+		                                                [value]="assetType">
+		                                                {{ assetType}}
+		                                            </mat-option>
+		                                        </mat-select>
+		                                    </mat-form-field> </mat-cell>
+		                                  </ng-container>
+		                                  <ng-container matColumnDef="observation">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                      <span>{{FiledLabels.OBSERVATION}}</span>
+		                                  </mat-header-cell>
+		                                  <mat-cell *matCellDef="let row"> {{row.observations}}</mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="kind">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                      <span>{{FiledLabels.KIND}}</span>
+		                                  </mat-header-cell>
+		                                  <mat-cell *matCellDef="let row"> {{row.kind}}</mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="assignedTo">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.ASSIGNED_TO}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                          <mat-form-field fxFlex="30">
+		                                      <mat-select [(ngModel)] = "row.assignedTo" >													
+		                                          <mat-option
+		                                              *ngFor="let employee of employeeList"
+		                                              [value]="employee.empFirstName">
+		                                              {{ employee.empFirstName}}
+		                                          </mat-option>
+		                                      </mat-select>
+		                                  </mat-form-field> </mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="compliance">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.COMPLIANCE}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                          <mat-form-field fxFlex="30">
+		                                      <mat-select [(ngModel)] = "row.compliance" >													
+		                                          <mat-option
+		                                          *ngFor="let status of complianceList"
+		                                          [value]="status.statusCode">
+		                                          {{ status.statusCode }}
+		                                          </mat-option>
+		                                      </mat-select>
+		                                  </mat-form-field> </mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="workDone">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.WORK_DONE}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                        <mat-form-field fxFlex="30">
+		                                            <input matInput   [value]="row.workDone"  autocomplete="off" 
+		                                            	[(ngModel)]="row.workDone" >
+		                                        </mat-form-field>
+		                                     </mat-cell>
+		                                </ng-container> 
+		                               
+		                                      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		                                      <mat-row *matRowDef="let row; columns: displayedColumns;">
+		                                      </mat-row>
+		                                    </mat-table> 
+		                                                                      
+		                                    </div>
+		                                    <div class="mat-elevation-z8" *ngIf=" ACTIVITY_CATEGORY.ABNORMALITY == part.statusItemCode">
+		                                    <mat-table [dataSource]="abnormalitydataSource" matSort>
+		                                      <!-- <ng-container matColumnDef="sno">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.S_NO}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row"> {{row.sno}}</mat-cell>
+		                                  </ng-container> -->
+		                                  <ng-container matColumnDef="assetType">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.EQUIPMENT}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row"> 
+		                                        <mat-form-field fxFlex="30">
+		                                            <mat-select [(ngModel)] = "row.assetType" >													
+		                                                <mat-option
+		                                                    *ngFor="let equipment of equipmentsList"
+		                                                    [value]="equipment.assetType">
+		                                                    {{ equipment.assetType}}
+		                                                </mat-option>
+		                                            </mat-select>
+		                                        </mat-form-field>   
+		                                    </mat-cell>
+		                                </ng-container>
+		                                    <ng-container matColumnDef="position">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                          <span>{{FiledLabels.POSITION}}</span>
+		                                      </mat-header-cell>
+		                                      <mat-cell *matCellDef="let row"> 
+		                                        <mat-form-field fxFlex="30">
+		                                            <mat-select [(ngModel)] = "row.position" >													
+		                                                <mat-option
+		                                                    *ngFor="let assetType of equipmentsList"
+		                                                    [value]="assetType.subAssetPosition">
+		                                                    {{ assetType.subAssetPosition}}
+		                                                </mat-option>
+		                                            </mat-select>
+		                                        </mat-form-field> 
+		                                      </mat-cell>
+		                                  </ng-container>
+		                                   <ng-container matColumnDef="serialNumber">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                          <span>{{FiledLabels.SERIAL_NO}}</span>
+		                                      </mat-header-cell>
+		                                      <mat-cell *matCellDef="let row">
+		                                            <mat-form-field fxFlex="30">
+		                                        <mat-select [(ngModel)] = "row.position" >													
+		                                            <mat-option
+		                                                *ngFor="let assetType of assetTypeList"
+		                                                [value]="assetType">
+		                                                {{ assetType}}
+		                                            </mat-option>
+		                                        </mat-select>
+		                                    </mat-form-field> </mat-cell>
+		                                  </ng-container>
+		                                  <ng-container matColumnDef="observation">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                      <span>{{FiledLabels.OBSERVATION}}</span>
+		                                  </mat-header-cell>
+		                                  <mat-cell *matCellDef="let row"> {{row.observations}}</mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="kind">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                      <span>{{FiledLabels.KIND}}</span>
+		                                  </mat-header-cell>
+		                                  <mat-cell *matCellDef="let row"> {{row.kind}}</mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="assignedTo">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.ASSIGNED_TO}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                          <mat-form-field fxFlex="30">
+		                                      <mat-select [(ngModel)] = "row.assignedTo" >													
+		                                          <mat-option
+		                                              *ngFor="let employee of employeeList"
+		                                              [value]="employee.empFirstName">
+		                                              {{ employee.empFirstName}}
+		                                          </mat-option>
+		                                      </mat-select>
+		                                  </mat-form-field> </mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="compliance">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.COMPLIANCE}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                          <mat-form-field fxFlex="30">
+		                                      <mat-select [(ngModel)] = "row.compliance" >													
+		                                          <mat-option
+		                                          *ngFor="let status of complianceList"
+		                                          [value]="status.statusCode">
+		                                          {{ status.statusCode }}
+		                                          </mat-option>
+		                                      </mat-select>
+		                                  </mat-form-field> </mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="workDone">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.WORK_DONE}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                        <mat-form-field fxFlex="30">
+		                                            <input matInput   [value]="row.workDone"  autocomplete="off" 
+		                                            	[(ngModel)]="row.workDone" >
+		                                        </mat-form-field>
+		                                     </mat-cell>
+		                                </ng-container> 
+		                               
+		                                      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		                                      <mat-row *matRowDef="let row; columns: displayedColumns;">
+		                                      </mat-row>
+		                                    </mat-table> 
+		                                                                      
+		                                    </div>
+		                                    <div class="mat-elevation-z8" *ngIf=" ACTIVITY_CATEGORY.SCHEDULE_ITEMS == part.statusItemCode">
+		                                    <mat-table [dataSource]="insCheckListdataSource" matSort>
+		                                      <!-- <ng-container matColumnDef="sno">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.S_NO}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row"> {{row.sno}}</mat-cell>
+		                                  </ng-container> -->
+		                                  <ng-container matColumnDef="assetType">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.EQUIPMENT}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row"> 
+		                                        <mat-form-field fxFlex="30">
+		                                            <mat-select [(ngModel)] = "row.assetType" >													
+		                                                <mat-option
+		                                                    *ngFor="let equipment of equipmentsList"
+		                                                    [value]="equipment.assetType">
+		                                                    {{ equipment.assetType}}
+		                                                </mat-option>
+		                                            </mat-select>
+		                                        </mat-form-field>   
+		                                    </mat-cell>
+		                                </ng-container>
+		                                    <ng-container matColumnDef="position">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                          <span>{{FiledLabels.POSITION}}</span>
+		                                      </mat-header-cell>
+		                                      <mat-cell *matCellDef="let row"> 
+		                                        <mat-form-field fxFlex="30">
+		                                            <mat-select [(ngModel)] = "row.position" >													
+		                                                <mat-option
+		                                                    *ngFor="let assetType of equipmentsList"
+		                                                    [value]="assetType.subAssetPosition">
+		                                                    {{ assetType.subAssetPosition}}
+		                                                </mat-option>
+		                                            </mat-select>
+		                                        </mat-form-field> 
+		                                      </mat-cell>
+		                                  </ng-container>
+		                                   <ng-container matColumnDef="serialNumber">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                          <span>{{FiledLabels.SERIAL_NO}}</span>
+		                                      </mat-header-cell>
+		                                      <mat-cell *matCellDef="let row">
+		                                            <mat-form-field fxFlex="30">
+		                                        <mat-select [(ngModel)] = "row.position" >													
+		                                            <mat-option
+		                                                *ngFor="let assetType of assetTypeList"
+		                                                [value]="assetType">
+		                                                {{ assetType}}
+		                                            </mat-option>
+		                                        </mat-select>
+		                                    </mat-form-field> </mat-cell>
+		                                  </ng-container>
+		                                  <ng-container matColumnDef="observation">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                      <span>{{FiledLabels.OBSERVATION}}</span>
+		                                  </mat-header-cell>
+		                                  <mat-cell *matCellDef="let row"> {{row.observations}}</mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="kind">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                      <span>{{FiledLabels.KIND}}</span>
+		                                  </mat-header-cell>
+		                                  <mat-cell *matCellDef="let row"> {{row.kind}}</mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="assignedTo">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.ASSIGNED_TO}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                          <mat-form-field fxFlex="30">
+		                                      <mat-select [(ngModel)] = "row.assignedTo" >													
+		                                          <mat-option
+		                                              *ngFor="let employee of employeeList"
+		                                              [value]="employee.empFirstName">
+		                                              {{ employee.empFirstName}}
+		                                          </mat-option>
+		                                      </mat-select>
+		                                  </mat-form-field> </mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="compliance">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.COMPLIANCE}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                          <mat-form-field fxFlex="30">
+		                                      <mat-select [(ngModel)] = "row.compliance" >													
+		                                          <mat-option
+		                                          *ngFor="let status of complianceList"
+		                                          [value]="status.statusCode">
+		                                          {{ status.statusCode }}
+		                                          </mat-option>
+		                                      </mat-select>
+		                                  </mat-form-field> </mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="workDone">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.WORK_DONE}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                        <mat-form-field fxFlex="30">
+		                                            <input matInput   [value]="row.workDone"  autocomplete="off" 
+		                                            	[(ngModel)]="row.workDone" >
+		                                        </mat-form-field>
+		                                     </mat-cell>
+		                                </ng-container> 
+		                               
+		                                      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		                                      <mat-row *matRowDef="let row; columns: displayedColumns;">
+		                                      </mat-row>
+		                                    </mat-table> 
+		                                                                      
+		                                    </div>
+		                                    <div class="mat-elevation-z8" *ngIf=" ACTIVITY_CATEGORY.MEMOS == part.statusItemCode" >
+		                                    <mat-table [dataSource]="memoDataSource" matSort>
+		                                      <!-- <ng-container matColumnDef="sno">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.S_NO}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row"> {{row.sno}}</mat-cell>
+		                                  </ng-container> -->
+		                                  <ng-container matColumnDef="assetType">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.EQUIPMENT}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row"> 
+		                                        <mat-form-field fxFlex="30">
+		                                            <mat-select [(ngModel)] = "row.assetType" >													
+		                                                <mat-option
+		                                                    *ngFor="let equipment of equipmentsList"
+		                                                    [value]="equipment.assetType">
+		                                                    {{ equipment.assetType}}
+		                                                </mat-option>
+		                                            </mat-select>
+		                                        </mat-form-field>   
+		                                    </mat-cell>
+		                                </ng-container>
+		                                    <ng-container matColumnDef="position">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                          <span>{{FiledLabels.POSITION}}</span>
+		                                      </mat-header-cell>
+		                                      <mat-cell *matCellDef="let row"> 
+		                                        <mat-form-field fxFlex="30">
+		                                            <mat-select [(ngModel)] = "row.position" >													
+		                                                <mat-option
+		                                                    *ngFor="let assetType of equipmentsList"
+		                                                    [value]="assetType.subAssetPosition">
+		                                                    {{ assetType.subAssetPosition}}
+		                                                </mat-option>
+		                                            </mat-select>
+		                                        </mat-form-field> 
+		                                      </mat-cell>
+		                                  </ng-container>
+		                                   <ng-container matColumnDef="serialNumber">
+		                                      <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                          <span>{{FiledLabels.SERIAL_NO}}</span>
+		                                      </mat-header-cell>
+		                                      <mat-cell *matCellDef="let row">
+		                                            <mat-form-field fxFlex="30">
+		                                        <mat-select [(ngModel)] = "row.position" >													
+		                                            <mat-option
+		                                                *ngFor="let assetType of assetTypeList"
+		                                                [value]="assetType">
+		                                                {{ assetType}}
+		                                            </mat-option>
+		                                        </mat-select>
+		                                    </mat-form-field> </mat-cell>
+		                                  </ng-container>
+		                                  <ng-container matColumnDef="observation">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                      <span>{{FiledLabels.OBSERVATION}}</span>
+		                                  </mat-header-cell>
+		                                  <mat-cell *matCellDef="let row"> {{row.observations}}</mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="kind">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                      <span>{{FiledLabels.KIND}}</span>
+		                                  </mat-header-cell>
+		                                  <mat-cell *matCellDef="let row"> {{row.kind}}</mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="assignedTo">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.ASSIGNED_TO}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                          <mat-form-field fxFlex="30">
+		                                      <mat-select [(ngModel)] = "row.assignedTo" >													
+		                                          <mat-option
+		                                              *ngFor="let employee of employeeList"
+		                                              [value]="employee.empFirstName">
+		                                              {{ employee.empFirstName}}
+		                                          </mat-option>
+		                                      </mat-select>
+		                                  </mat-form-field> </mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="compliance">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.COMPLIANCE}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                          <mat-form-field fxFlex="30">
+		                                      <mat-select [(ngModel)] = "row.compliance" >													
+		                                          <mat-option
+		                                          *ngFor="let status of complianceList"
+		                                          [value]="status.statusCode">
+		                                          {{ status.statusCode }}
+		                                          </mat-option>
+		                                      </mat-select>
+		                                  </mat-form-field> </mat-cell>
+		                                </ng-container>
+		                                <ng-container matColumnDef="workDone">
+		                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                        <span>{{FiledLabels.WORK_DONE}}</span>
+		                                    </mat-header-cell>
+		                                    <mat-cell *matCellDef="let row">
+		                                        <mat-form-field fxFlex="30">
+		                                            <input matInput   [value]="row.workDone"  autocomplete="off" 
+		                                            	[(ngModel)]="row.workDone" >
+		                                        </mat-form-field>
+		                                     </mat-cell>
+		                                </ng-container> 
+		                               
+		                                      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		                                      <mat-row *matRowDef="let row; columns: displayedColumns;">
+		                                      </mat-row>
+		                                    </mat-table> 
+		                                                                      
+		                                    </div>
+		                                    
+		                                    
+		                                   
+		                                    </mat-tab>
+		                                    <mat-tab [label]="label2" >
+		                                        <div class="mat-elevation-z8">
+		                                            <mat-table [dataSource]="historyDataSource" matSort>
+		                                              <ng-container matColumnDef="sno">
+		                                              <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                                <span>{{FiledLabels.S_NO}}</span>
+		                                            </mat-header-cell>
+		                                            <mat-cell *matCellDef="let row"> {{row.sno}}</mat-cell>
+		                                          </ng-container>
+		                                          <ng-container matColumnDef="updatedOn">
+		                                            <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                                <span>{{FiledLabels.UPDATED_ON}}</span>
+		                                            </mat-header-cell>
+		                                            <mat-cell *matCellDef="let row"> 
+		                                                {{row.updatedOn}} 
+		                                            </mat-cell>
+		                                        </ng-container>
+		                                        <ng-container matColumnDef="updatedBy">
+		                                            <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                                <span>{{FiledLabels.UPDATED_BY}}</span>
+		                                            </mat-header-cell>
+		                                            <mat-cell *matCellDef="let row"> 
+		                                                {{row.updatedBy}} 
+		                                            </mat-cell>
+		                                        </ng-container>
+		                                        <ng-container matColumnDef="status">
+		                                            <mat-header-cell *matHeaderCellDef mat-sort-header>
+		                                                <span>{{FiledLabels.STATUS}}</span>
+		                                            </mat-header-cell>
+		                                            <mat-cell *matCellDef="let row"> 
+		                                                {{row.statusFrom}} 
+		                                            </mat-cell>
+		                                        </ng-container>                                       
+		                                       
+		                                              <mat-header-row *matHeaderRowDef="historyDisplayedColumns"></mat-header-row>
+		                                              <mat-row *matRowDef="let row; columns: historyDisplayedColumns;">
+		                                              </mat-row>
+		                                            </mat-table> 
+		                                                                              
+		                                            </div> 
+		                                        </mat-tab>
+		                                    </mat-tab-group>
+		                                   
+									 </div>
+							</mat-expansion-panel>
+							</mat-accordion>
+							<div class="col-md-6 mt-15" *ngIf="savePermission == 'false'">
+								<div class="float-right" style="float: right;">
+									<button mat-raised-button color="accent" (click)="save()">Save</button>
+								</div>
+							</div>
+							<div class="col-md-6 mt-15"
+								*ngIf="acknowledgePermission == 'false'">
+								<div class="float-right" style="float: right;">
+									<button mat-raised-button color="accent"
+										(click)="acknowledge()">Acknowledge</button>
+
+								</div>
+							</div>
+							<div class="col-md-6 mt-15">
+								<div class="float-centre" style="float: centre;">
+									<button mat-raised-button color="accent" (click)="onGoBack()">Back</button>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

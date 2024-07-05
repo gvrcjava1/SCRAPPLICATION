@@ -1,0 +1,194 @@
+
+<div class="content container-fluid">
+  <div class="row">
+    <div class="col-12">
+        <div class="breadcrumb-section">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+                        <li class="breadcrumb-item"><a [routerLink]="['/energy']">Energy</a>
+                          <li class="breadcrumb-item active" aria-current="page">Energy Bill Payment</li>
+                </ol>
+            </nav>
+          </div>
+            <div class="clear"></div>       
+                <div class="row-fluid">
+                        <div class="panel panel-primary">
+                        <div class="panel-heading">Energy Bill Payment Information</div>
+                        <div class="panel-body">
+                            <div id="forms" class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+                                <div class="p-24">
+                                    <div fxLayout="column" fxLayoutAlign="start start" fxLayout.gt-md="row">
+                                    	<div class="p-24">
+	                                    	<div class="example-header">
+		                                        <div class="col-sm-4">
+		                                            <mat-form-field>
+		                                              <input class="filter" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+		                                            </mat-form-field>
+		                                        </div>
+		                                    </div>
+	                                        <div  style="text-align: right; padding-top: 12px;" *ngIf="addPermission">
+	                                            <span class="mat-raised-button mat-accent" (click)="addNewEnergyBillPayment()" *ngIf="!addEnergyBillPayment"
+	                                              color="accent" mat-raised-button="">
+	                                              Add EnergyBillPayment
+	                                            </span>
+	                                        </div>
+                                        </div>
+                                        <div class="clear"></div>
+                                          <form class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24" *ngIf="addEnergyBillPayment" fxLayout="column"
+                                                fxLayoutAlign="start" [formGroup]="energyBillPaymentFormGroup" fxFlex="1 0 auto"
+                                                (ngSubmit)="onEnergyBillPaymentSubmit();">
+                                          <div class="panel panel-primary">
+                                                <div class="panel-heading">{{title}} {{Titles.ENERGY_BILL_PAYMENT}}</div>
+                                                <div class="panel-body">
+                                                    <div class="col-md-12">
+                                                    	<div class="col-md-3" *ngIf="enableReference else referenceElseBlock">
+                                                            <mat-form-field fxFlex="30">
+                                                                <input matInput placeholder="{{FiledLabels.REFERENCE}}" [formControl]="energyBillPaymentFormGroup.controls['reference']" required />
+                                                            </mat-form-field>
+                                                        </div>
+                                                       <ng-template #referenceElseBlock>
+													   		<div class = "col-md-3" >
+                                                      			<mat-form-field fxFlex="30">
+                                                      				<input matInput placeholder = "{{FiledLabels.REFERENCE}}" [formControl]="energyBillPaymentFormGroup.controls['reference']" required [readonly]="true"/>
+                                                      			</mat-form-field>
+                                                      		</div>
+														</ng-template> 
+                                                        <div class="col-md-3">
+                                                            <mat-form-field fxFlex="30">
+                                                                <input matInput placeholder="{{FiledLabels.TO_PAYMENT}}" [formControl]="energyBillPaymentFormGroup.controls['toPayment']" required />
+                                                            </mat-form-field>
+                                                            <mat-error *ngIf="energyBillPaymentFormGroup.controls['toPayment'].hasError('duplicateReferenceAndToPayment')"
+	                                                            class="alert alert-danger">
+	                                                             Already Exists
+	                                                        </mat-error>
+	                                                        <mat-error *ngIf="energyBillPaymentFormGroup.controls['toPayment'].hasError('duplicateReferenceAndToPaymentAndId')"
+	                                                            class="alert alert-danger">
+	                                                             Already Exists
+	                                                        </mat-error>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <mat-form-field fxFlex="30">
+                                                                <input matInput placeholder="{{FiledLabels.AMOUNT}}" decimalNumber [formControl]="energyBillPaymentFormGroup.controls['amount']" required />
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <mat-form-field>
+                                                                <input matInput [matDatepicker]="picker" placeholder="{{FiledLabels.DATE}}" [max]="maxDate" [formControl]="energyBillPaymentFormGroup.controls['dateOfPayment']" required>
+                                                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                                                    <mat-datepicker #picker  ></mat-datepicker> <!--(yearSeleceted)="close($event)"-->
+                                                              </mat-form-field>
+                                                        </div>      
+                                                        <div class="col-md-3">
+						                                    <mat-form-field fxFlex="30" class="example-full-width">
+						                                        <mat-select placeholder="{{FiledLabels.DIVISION}}" [formControl]="energyBillPaymentFormGroup.controls['division']" required>
+						                                            <mat-option *ngFor="let divisionList of divisionList "
+						                                                [value]="divisionList.code">
+						                                                {{ divisionList.code}}
+						                                            </mat-option>
+						                                        </mat-select>
+						                                    </mat-form-field>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <mat-form-field fxFlex="30">
+                                                                <input matInput placeholder="{{FiledLabels.MONTH}}" numbersOnly [formControl]="energyBillPaymentFormGroup.controls['month']" decimalNumber required />
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <mat-form-field fxFlex="30">
+                                                                <input matInput placeholder="{{FiledLabels.YEAR}}" [formControl]="energyBillPaymentFormGroup.controls['year']"decimalNumber />
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div class="col-md-3 mt-15">
+                                                                <div fxFlex="10" fxLayoutAlign="center center" style="padding-bottom:10px;" class="pr-5 d-inline">
+                                                                    <button mat-raised-button color="accent" [disabled]="energyBillPaymentFormGroup.invalid"
+                                                                        class="submit-button" aria-label="Submit">
+                                                                        {{title}}
+                                                                    </button>
+                                                                </div>
+                                                                <div class="p-12 d-inline">
+                                                                    <span class="mat-raised-button mat-warn" (click)="onGoBack()" color="warn"
+                                                                      mat-raised-button="">
+                                                                      Close
+                                                                    </span>
+                                                                  </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-12">
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>    
+                                        </form> 
+                                    </div>
+                                    
+                                    <div class="clear"> </div>
+                                    <div class="mat-elevation-z8">
+                                        <mat-table [dataSource]="energyBillPaymentDataSource" matSort>
+                                            <ng-container matColumnDef="sno">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.S_NO}}</mat-header-cell>
+                                                <mat-cell *matCellDef="let row"> {{row.sno}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="reference">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.REFERENCE}}</mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+                                                  {{row.reference}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="toPayment">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.TO_PAYMENT}}</mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+                                                  {{row.toPayment}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="amount">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.AMOUNT}}</mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+                                                  {{row.amount}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="dateOfPayment">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.DATE_OF_PAYMENT}}</mat-header-cell>
+                                                    <mat-cell *matCellDef="let row" style="cursor: pointer">
+                                                      {{row.dateOfPayment}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="division">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.DIVISION}}</mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+                                                  {{row.division}}</mat-cell>
+                                            </ng-container>
+                                           <ng-container matColumnDef="month">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.MONTH}}</mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+                                                  {{row.month}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="year">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.YEAR}}</mat-header-cell>
+                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+                                                  {{row.year}}</mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="id">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.ACTIONS}}</mat-header-cell>
+                                                    <mat-cell *matCellDef="let row">
+                                                      <a mat-icon-button matTooltip="Edit" *ngIf="editPermission"
+                                                        (click)="editEneBillPayment(row.id)">
+                                                        <mat-icon style="color: rgb(0, 145, 234);">edit</mat-icon>
+                                                      </a>
+                                                      <button mat-icon-button matTooltip="Delete" *ngIf="deletePermission"
+                                                        (click)="deleteEneBillPayment(row.id)">
+                                                        <mat-icon style="color: rgb(244, 67, 54);">delete</mat-icon>
+                                                      </button>
+                                                    </mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="eneBillPaymentDisplayedColumns"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: eneBillPaymentDisplayedColumns;">
+                                            </mat-row>
+                                        </mat-table>
+                                        <mat-paginator [pageSizeOptions]="pagination"></mat-paginator>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>   
+                      </div>
+                </div>
+        </div>
+    </div>
+</div>

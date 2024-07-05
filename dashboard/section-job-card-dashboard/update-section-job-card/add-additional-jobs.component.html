@@ -1,0 +1,72 @@
+<div class="row-fluid">
+    <div class="close-box">
+      <div mat-dialog-actions class="pt-24 ">
+          <button class="mat-accent mr-16" mat-button (click)="dialogRef.close(false)"><i
+                  class="material-icons">
+                  close
+              </i>
+          </button>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div id="forms" class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+          <div class="p-24">
+                  
+                  <form class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24"  fxLayout="column"
+                          fxLayoutAlign="start" [formGroup]="additionalJobsFormGroup" fxFlex="1 0 auto" 
+                          (ngSubmit)="saveAdditionalJobs();" >
+                          <div class="panel panel-primary">
+                               <div class="panel-heading">{{Titles.ADDITIONAL_JOBS}}</div>
+    
+                              <div class="panel-body">
+                                
+                                 <div class="col-md-3">
+                                  <mat-form-field fxFlex="30">
+                                    <mat-select placeholder="{{FiledLabels.SOURCE}}"
+                                         [formControl]="additionalJobsFormGroup.controls['source']">
+                                         <mat-option
+                                              *ngFor="let source of sourceList"
+                                              [value]="source.statusCode">
+                                              {{ source.statusCode}}
+                                         </mat-option>
+                                    </mat-select>
+                               </mat-form-field>
+                                </div> 
+                                <div class="col-md-3">
+                                    <mat-form-field fxFlex="30">
+                                      <mat-select placeholder="{{FiledLabels.KIND}}" 
+                                           [formControl]="additionalJobsFormGroup.controls['kind']" >
+                                           <mat-option
+                                                *ngFor="let kind of kindList"
+                                                [value]="kind.statusCode">
+                                                {{ kind.statusCode}}
+                                           </mat-option>
+                                      </mat-select>
+                                 </mat-form-field>
+                                  </div> 
+                                  <div class="col-md-3">
+                                    <mat-form-field>
+                                        <input matInput autocomplete="off" placeholder="{{FiledLabels.OBSERVATIONS}}"
+                                         [formControl]="additionalJobsFormGroup.controls['observations']" required>
+                                       </mat-form-field>
+                                </div>                            
+                                
+                                <div class="col-md-3 mt-15"  >
+                                    <div class="float-right" style="float: right;" >      
+                                <button class="mat-raised-button mat-accent" color="accent"
+                                                            class="d-inline" mat-raised-button="" type="submit"
+                                                             [disabled]="additionalJobsFormGroup.invalid" >
+                                                           {{title}}
+                                                        </button>
+                                                        </div>
+                                                        </div>
+      
+      </div>
+    </div>
+    </form>
+     </div>
+     
+   
+          </div>
+      </div>
+    </div> 

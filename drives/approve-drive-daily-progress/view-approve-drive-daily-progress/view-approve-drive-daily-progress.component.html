@@ -1,0 +1,73 @@
+<div class="row">
+    <div class="col-12">
+        <div class="row-fluid">
+            <div class="close-box">
+                <div mat-dialog-actions class="pt-24 ">
+                    <button class="mat-accent mr-16" mat-button (click)="dialogRef.close(false)"><i
+                            class="material-icons">
+                            close
+                        </i>
+                    </button>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">{{title}}</div>
+                <div class="panel-body">
+                    <div id="forms" class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+                        <div class="p-24">
+
+                            <div class="example-container mat-elevation-z8">
+
+                                <mat-table [dataSource]="DDProgressDataSource" matSort>
+
+                                    <ng-container matColumnDef="sno">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="100px">
+                                            {{FiledLabels.S_NO}}
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row"> {{row.sno}}</mat-cell>
+                                    </ng-container>
+
+
+                                    <ng-container matColumnDef="drive">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.DRIVE}}
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row"> {{row.driveId.name}}</mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="depot">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.DEPOT}}
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row"> {{row.depot}}</mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="date">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.DATE}}
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row">
+                                            {{row.performedDate}}</mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="performedCount">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            {{FiledLabels.PERFORMED_COUNT}}
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row"> {{row.performedCount}}</mat-cell>
+                                    </ng-container>
+
+                                    <mat-header-row *matHeaderRowDef="DDProgressDisplayedColumns"></mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: DDProgressDisplayedColumns;">
+                                    </mat-row>
+                                </mat-table>
+                                <mat-paginator [pageSizeOptions]="pagination"></mat-paginator>
+                            </div>
+                        </div>
+                        <br>
+                        <div mat-dialog-actions class="pt-24 text-right">
+                            <button class="mat-accent mr-16" mat-button (click)="dialogRef.close(false)">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

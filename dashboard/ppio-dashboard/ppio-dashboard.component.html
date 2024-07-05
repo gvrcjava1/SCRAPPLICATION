@@ -1,0 +1,180 @@
+
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="content container-fluid">
+	<div class="row">
+		<div class="col-12">
+			<div class="breadcrumb-section">
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+						<li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Dashboard
+						</a></li>
+						<li class="breadcrumb-item active" aria-current="page">PPIO
+							Dash Board</li>
+					</ol>
+				</nav>
+			</div>
+			<div class="clear"></div>
+			<div class="row-fluid">
+				<div class="panel panel-primary">
+					<div class="panel-heading">PPIO Dash Board</div>
+					<div class="panel-body">
+						<div class="col-md-3" *ngIf = "enableZone" >
+                                    <mat-form-field fxFlex="30" class="example-full-width">
+                                        <mat-select placeholder="{{FiledLabels.SHED}}" (selectionChange)="getSectionJobCardData(depotCode)" [(ngModel)]="depotCode" >
+                                            <mat-option *ngFor="let facility of depotsData "
+                                                [value]="facility">
+                                                {{ facility.facilityName}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                        </div>
+						<table class="table" >
+							<thead>
+								<th colspan="4">Loco Details</th>
+								<th>Sections</th>
+							</thead>
+							<thead>
+								<th *ngFor="let item of displayColumns" style="fontSize: 5px">
+									<span [ngStyle]="{'font-size':'12px'}">
+										{{item}}</span>
+								</th>
+								<th *ngFor="let item of enggSectionList" style="fontSize: 5px" >
+									<span [ngStyle]="{'font-size':'12px'}" >
+										{{item.enggSectionCode}}</span>
+								</th>
+
+							</thead>
+							<tbody>
+												<tr *ngFor="let SJCData of sectionJobCardData;let i=index">
+													<td>{{SJCData.locoId}}</td>
+													<td>{{SJCData.schedule}}</td>
+													<td>{{SJCData.sectionJcMovementRegisterEntryDateTime | date: 'dd-MM-yyyy' }}</td>
+													<td>{{SJCData.sectionJcMovementRegisterRemarks}}</td>
+													
+														<td *ngFor="let item of enggSectionList" style="fontSize: 5px" >
+															<a [routerLink]="['ppio-job-card/',SJCData.sectionJobcardId]" >
+																	<span class="jobCardIdBox" [ngStyle]="{'font-size':'12px'}" *ngIf = "SJCData.engineeringSection == item.enggSectionCode"  [style.background-color]="SJCData.colorCode">
+															{{SJCData.jobCardId}}</span>
+														</a>	
+													</td>
+												
+												</tr>
+											</tbody>
+										</table>
+						<div class="mat-elevation-z8">
+						
+						
+						<!-- <ng-container *ngFor="let item of enggSectionList" >
+								 <th>{{ item?.enggSectionCode }}</th>
+								</ng-container> -->
+						<!-- <mat-table [dataSource]="sectionJobCardData" matSort>
+							 <ng-container *ngFor="let k of displayColumns">
+    <ng-container [matColumnDef]="k">
+      <th mat-header-cell *matHeaderCellDef> {{k}}</th>
+      <td mat-cell *matCellDef="let element"> {{element[k.enggSectionCode]}} </td>
+    </ng-container>
+  </ng-container>
+							<ng-container matColumnDef="loco"> 
+								<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.LOCO}} </mat-header-cell>
+								<mat-cell *matCellDef="let row"> {{row.sectionJcMovementRegister.assetId.assetId}}</mat-cell>
+							 </ng-container> 
+							 <ng-container matColumnDef="schedule"> 
+							 	<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.SCHEDULE}}</mat-header-cell>
+								<mat-cell *matCellDef="let row" style="cursor: pointer"> {{row.sectionJcMovementRegister.addSch.scheduleCode}}</mat-cell>
+							</ng-container> 
+							<ng-container matColumnDef="beforeSchedule">
+								<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.BEFORE_SCHEDULE}}</mat-header-cell>
+								<mat-cell *matCellDef="let row"  [routerLink]="['/dashboard/section-job-card/'+row.jobCardId.id]"
+                                                style="max-width:70px;cursor: pointer; text-decoration: underline;font-weight: 600;color: #014884;" > {{row.jobCardId.id}} </mat-cell> 
+							</ng-container> 
+							<ng-container matColumnDef="afterSchedule">
+								<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.AFTER_SCHEDULE}}</mat-header-cell>
+								<mat-cell *matCellDef="let row" style="cursor: pointer"> </mat-cell> 
+							</ng-container> 
+							<ng-container matColumnDef="verification">
+								<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.VERIFICATION}}</mat-header-cell>
+								<mat-cell *matCellDef="let row" style="cursor: pointer"> </mat-cell> 
+							</ng-container>
+							<ng-container matColumnDef="postReady">
+								<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.POST_READY}}</mat-header-cell>
+								<mat-cell *matCellDef="let row" style="cursor: pointer"> </mat-cell> 
+							</ng-container>
+							<mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+								<mat-row *matRowDef="let row; columns: displayColumns">
+								</mat-row> 
+							</mat-table> -->		
+						<!-- <table *ngIf="sectionJobCardData && enggSectionList" mat-table [dataSource]="sectionJobCardData" class="mat-elevation-z8">
+
+  <ng-container *ngFor="let k of enggSectionList">
+    <ng-container [matColumnDef]="k.enggSectionCode">
+      <th mat-header-cell *matHeaderCellDef> {{k.enggSectionCode}}</th>
+      <td mat-cell *matCellDef="let element"> {{element[k.enggSectionCode]}} </td>
+    </ng-container>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table> -->		
+						
+						<!-- <table border="1" width="100%">
+        <thead>
+            <tr>
+                <td *ngFor="let item of enggSectionList" >{{ item?.name }}</td>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table> -->
+							<!-- <mat-table [dataSource]="sectionJobCardData" matSort>
+							<ng-container *ngFor="let title of enggSectionList">
+							  <ng-container  matColumnDef="header-row-second-group">
+							    <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" > {{title}} <br> </th>
+							  </ng-container>
+							  <ng-container *ngFor="let item of enggSectionList" >
+								 <td *ngIf="item.visible">{{ item?.enggSectionCode }}</td>
+								</ng-container>
+							</ng-container>
+							
+							</mat-table> -->
+						</div>
+					</div>
+					<table class="table">
+					<thead *ngIf="sectionJobCardStatusTypes">
+						<b style="color: red">{{FiledLabels.JOB_CARD_STATUS}}</b>
+						<tr style="border: 1px solid black;">
+							<th *ngFor="let attribute of sectionJobCardStatusTypes"
+								style="fontSize: 5px">
+								<span
+								class="box"
+								[ngStyle]="{'background-color':attribute.statusItemAttribute1}"></span>
+								<span [ngStyle]="{'font-size':'12px'}">{{attribute.statusItemCode}}</span>
+								
+							</th>
+						</tr>
+					</thead>
+				</table>
+				<table class="table">
+					<thead *ngIf="LocoJobcardStatusTypes">
+						<b style="color: red">{{FiledLabels.LOCO_STATUS}}</b>
+						<tr style="border: 1px solid black;">
+							<th *ngFor="let attribute of LocoJobcardStatusTypes"
+								style="fontSize: 5px">
+								<span
+								class="box"
+								[ngStyle]="{'background-color':attribute.statusItemAttribute1}"></span>
+								<span [ngStyle]="{'font-size':'12px'}"> {{attribute.statusItemCode}}</span>
+							</th>
+						</tr>
+					</thead>
+				</table>
+					
+				</div>
+				
+				
+			</div>
+			
+		</div>
+	</div>
+</div>

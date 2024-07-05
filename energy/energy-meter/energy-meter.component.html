@@ -1,0 +1,278 @@
+<div class="content container-fluid">
+		<div class="col-12">
+			<div class="breadcrumb-section">
+	            <nav aria-label="breadcrumb">
+	                <ol class="breadcrumb">
+	                        <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+	                        <li class="breadcrumb-item"><a [routerLink]="['/energy/energy-bill-payment']">Energy</a>
+	                        <li class="breadcrumb-item active" aria-current="page">Energy Meter</li>
+	                </ol>
+	            </nav>
+	          </div>
+			<div class="clear"></div>
+			<div class="row-fluid">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Energy Meter</div>
+						<div class="panel-body">
+							<div id="forms" class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+								<div class="p-24">
+									<div fxLayout="column" fxLayoutAlign="start start" fxLayout.gt-md="row">
+										<div class="p-24">
+											<div class="example-header">
+		                                        <div class="col-sm-4">
+		                                            <mat-form-field>
+		                                              <input class="filter" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+		                                            </mat-form-field>
+		                                        </div>
+		                                        <div style="text-align: right; padding-top: 12px;" *ngIf="addPermission">
+													<span class="mat-raised-button mat-accent" (click)="newEnergyMeter()" *ngIf="!addEnergyMeter"
+		                                              color="accent" mat-raised-button="">
+		                                              Add Energy Meter
+		                                            </span>
+		                                       </div>
+	                                    	</div>
+										</div>
+										<div class="clear"></div>
+										     
+                                            <form class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24" *ngIf="addEnergyMeter" fxLayout="column"
+                                                fxLayoutAlign="start" [formGroup]="energyMeterFormGroup" fxFlex="1 0 auto"
+                                                (ngSubmit)="energyMeterSubmit();">
+                                            	<div class="panel panel-primary">
+                                            		<div class="panel-heading">{{title}} {{Titles.ENERGY_METER}}</div>
+	                                            		<div class="panel-body">
+	                                                    <div class="col-md-12">
+	                                                    	<div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.METER_NUMBER}}" [formControl]="energyMeterFormGroup.controls['meterNo']" />
+	                                                            </mat-form-field>
+	                                                        </div>
+									                        <div *ngIf ="enableEndReadings">
+									                        </div>
+									                        <div class="col-md-3">
+		                                                       		<div *ngIf = "checkDivisionUser ; else checkDivisionUserElseBlock">
+			                                                            <mat-form-field fxFlex="30">
+			                                                                 <!-- [(ngModel)]="userDefaultData.division"-->
+			                                                                 <mat-select placeholder="Division" [(ngModel)]="divCode"
+			                                                                      [formControl]="energyMeterFormGroup.controls['dataDiv']"
+			                                                                      (selectionChange)="getTssFeeders($event)">
+			                                                                      <mat-option *ngFor="let division of orginalDivisionsData"
+			                                                                           [value]="division.division">
+			                                                                           {{ division.division}}
+			                                                                      </mat-option>
+			                                                                 </mat-select>
+			                                                            </mat-form-field>
+		                                                            </div>
+		                                                            <ng-template #checkDivisionUserElseBlock>
+		                                                            	<mat-form-field fxFlex="30">
+																			<input matInput formControlName="dataDiv" [value]="divCode"
+																		    	[(ngModel)]="divCode" readonly>
+																		</mat-form-field>
+		                                                            </ng-template>
+		                                                       </div>
+									                        <div *ngIf="!enableEndReadings; else feederElseBlock">
+									                        	<div class="col-md-3">
+									                             <mat-form-field fxFlex="30">
+									                              <mat-select placeholder="{{FiledLabels.FEEDER}}" [formControl]="energyMeterFormGroup.controls['feederId']" required >
+									                                <mat-option *ngFor="let tssFeederMater of tssFeederMaterList" [value]="tssFeederMater">
+									                                  {{ tssFeederMater.feederName}}
+									                                </mat-option>
+									                              </mat-select>
+									                               <mat-error
+										                            	*ngIf="energyMeterFormGroup.controls['feederId'].hasError('dupllicateFeederhavingEndDate')" 
+										                            		class="alert alert-danger" >
+										                                		Already Exists
+										                        	</mat-error>
+									                            </mat-form-field>
+									                        </div>
+									                        </div>
+															<ng-template #feederElseBlock>
+																  <div class = "col-md-3" >
+                                                      				<mat-form-field fxFlex="30">
+                                                      					<input matInput placeholder = "{{FiledLabels.FEEDER}}" [formControl]="energyMeterFormGroup.controls['feederId']" required [readonly]="true"/>
+                                                      				</mat-form-field>
+                                                      			  </div>
+															</ng-template>
+									                      
+		                                                    <div class="col-md-3">
+		                                                        <mat-form-field fxFlex="30">
+		                                                             <input matInput autocomplete="off" [owlDateTime]="dt1" style="width: 94%;"
+		                                                                [owlDateTimeTrigger]="dt1" placeholder="{{FiledLabels.START_DATE}}"                                                                
+		                                                                (dateTimeChange)="addEvent($event)"  [max]="maxDate"
+		                                                                [formControl]="energyMeterFormGroup.controls['startDate']" required >                                                                
+		                                                                <owl-date-time #dt1 [showSecondsTimer]=true
+		                                                                    ></owl-date-time>
+		                                                                <span [owlDateTimeTrigger]="dt1"><i class="fa fa-calendar"></i></span>
+		                                                                <mat-error
+										                            		*ngIf="energyMeterFormGroup.controls['startDate'].hasError('duplicateFeederAndStartDate')" 
+										                            		class="alert alert-danger" >
+										                                		Already Exists Or Meter Was Ended Before Start Date
+										                        		</mat-error>
+		                                                        </mat-form-field>
+		                                                    </div>  
+	                                                        <div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.MULTIPLICATION_FACTOR}}" decimalNumber [formControl]="energyMeterFormGroup.controls['multiplicationFac']" required />
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.START_KVAH}}" decimalNumber [formControl]="energyMeterFormGroup.controls['startKvah']" required />
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.START_KWH}}" decimalNumber [formControl]="energyMeterFormGroup.controls['startKwh']" required />
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.START_RKVAH_LAG}}" decimalNumber [formControl]="energyMeterFormGroup.controls['startRkvahLag']"  />
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.START_RKVAH_LEAD}}" decimalNumber [formControl]="energyMeterFormGroup.controls['startRkvahLead']"   />
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.METER_MAKE}}"  [formControl]="energyMeterFormGroup.controls['meterMake']" />
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.METER_MODEL}}"  [formControl]="energyMeterFormGroup.controls['meterModel']" />
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.CMD_VALUE}}" max ="100" decimalNumber [formControl]="energyMeterFormGroup.controls['cmd']" />
+																	<mat-error
+		                                                                *ngIf="energyMeterFormGroup.controls['cmd'].hasError('max') "
+		                                                                class="alert alert-danger">Please enter a value between 0 to 100
+		                                                            </mat-error>
+	                                                            </mat-form-field>
+	                                                        </div>
+		                                                    <div *ngIf ="enableEndReadings">
+  															<div class="col-md-3">
+		                                                        <mat-form-field fxFlex="30">
+	  																<input matInput autocomplete="off" [owlDateTime]="dt2" style="width: 94%;"
+		                                                                [owlDateTimeTrigger]="dt2" placeholder="{{FiledLabels.END_DATE}}"
+		                                                                [min]="toMinDate" (dateTimeChange)="endDateValidation()" 
+		                                                                [formControl]="energyMeterFormGroup.controls['endDate']" >                                                                
+		                                                                <owl-date-time #dt2 [showSecondsTimer]=true 
+		                                                                    ></owl-date-time>
+		                                                                <span [owlDateTimeTrigger]="dt2" ><i class="fa fa-calendar"></i></span>
+	  															</mat-form-field>
+  															</div>
+  															<div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.END_KVAH}}" decimalNumber [formControl]="energyMeterFormGroup.controls['endKvah']" (change)="checkEndReadingValidations()" />
+																	
+																</mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.END_KWH}}" decimalNumber [formControl]="energyMeterFormGroup.controls['endKwh']" (change)="checkEndReadingValidations()"/>
+																	
+																</mat-form-field>
+	                                                        </div>
+	                                                       <div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.END_RKVAH_LAG}}"  decimalNumber [formControl]="energyMeterFormGroup.controls['endRkvahLag']" (change)="endDateAndEndReadingsValidation()" />
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-2">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput autocomplete="off" placeholder="{{FiledLabels.END_RKVAH_LEAD}}" decimalNumber [formControl]="energyMeterFormGroup.controls['endRkvahLead']" (change)="endDateAndEndReadingsValidation()"/>
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        </div>
+  															<div class="col-md-3">
+	                                                            <mat-form-field fxFlex="30">
+	                                                            	<textarea textareaAutoresize matInput autocomplete="off" placeholder="{{FiledLabels.REMARKS}}" [formControl]="energyMeterFormGroup.controls['remarks']" (change)="endDateAndEndReadingsValidation()"></textarea>
+	                                                                <mat-error
+		                                                                *ngIf="energyMeterFormGroup.controls['remarks'].hasError('maxlength')"
+		                                                                class="alert alert-danger">Max 250 characters only
+		                                                            </mat-error>
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-3 mt-15">
+	                                                                <div fxFlex="10" fxLayoutAlign="center center" style="padding-bottom:10px;" class="pr-5 d-inline">
+	                                                                    <button mat-raised-button color="accent" [disabled]="energyMeterFormGroup.invalid"
+	                                                                     class="submit-button" aria-label="Submit">
+	                                                                        {{title}}
+	                                                                    </button>
+	                                                                </div>
+	                                                                <div class="p-12 d-inline">
+	                                                                    <span class="mat-raised-button mat-warn" (click)="onGoBack()" color="warn"
+	                                                                      mat-raised-button="">
+	                                                                      Back
+	                                                                    </span>
+	                                                                  </div>
+	                                                        </div>
+	                                                    </div>
+	                                                    <div class="col-md-12">
+	                                                    </div>
+	                                                </div>
+                                            	</div>    
+                                            </form>    
+										</div> 
+										
+                                    	<div class="clear"> </div>
+                                    	<div class="mat-elevation-z8">
+                                    		<mat-table [dataSource]="energyMeterDataSource" matSort>
+                                    			<ng-container matColumnDef="sno">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.S_NO}}</mat-header-cell>
+	                                                <mat-cell *matCellDef="let row"> {{row.sno}}</mat-cell>
+	                                            </ng-container>
+	                                            <ng-container matColumnDef="cmd">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.CMD}}</mat-header-cell>
+	                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+	                                                  {{row.cmd}}</mat-cell>
+	                                            </ng-container>
+	                                            <ng-container matColumnDef="feederId">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.FEEDER}}</mat-header-cell>
+	                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+	                                                  {{row.feederId}}</mat-cell>
+	                                            </ng-container>
+	                                            <ng-container matColumnDef="startKvah">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.START_KVAH}}</mat-header-cell>
+	                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+	                                                  {{row.startKvah}}</mat-cell>
+	                                            </ng-container>
+	                                            <ng-container matColumnDef="startKwh">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.START_KWH}}</mat-header-cell>
+	                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+	                                                  {{row.startKwh}}</mat-cell>
+	                                            </ng-container>
+	                                            <ng-container matColumnDef="id">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.ACTIONS}}</mat-header-cell>
+	                                                    <mat-cell *matCellDef="let row">
+	                                                    	<button mat-icon-button matTooltip="View"
+									                        	(click)="ViewData(row)">
+									                        	<mat-icon style="color: rgb(0, 145, 234);">preview</mat-icon>
+									                      	</button>
+	                                                      <a mat-icon-button matTooltip="Edit" *ngIf="editPermission"
+	                                                        (click)="editEnergyMeter(row.id)">
+	                                                        <mat-icon style="color: rgb(0, 145, 234);">edit</mat-icon>
+	                                                      </a>
+	                                                      <button mat-icon-button matTooltip="Delete" *ngIf="deletePermission"
+	                                                        (click)="deleteEnergyMeter(row.id)">
+	                                                        <mat-icon style="color: rgb(244, 67, 54);">delete</mat-icon>
+	                                                      </button>
+	                                                    </mat-cell>
+	                                            </ng-container>
+	                                            <mat-header-row *matHeaderRowDef="energyMeterDisplayColumns"></mat-header-row>
+                                            	<mat-row *matRowDef="let row; columns: energyMeterDisplayColumns">
+                                            	</mat-row>
+                                    		</mat-table>
+                                    		<mat-paginator [pageSizeOptions]="pagination"></mat-paginator>
+                                    	</div>
+								</div>
+							</div>
+						</div>				
+				</div>
+			</div>
+		</div>
+	</div>

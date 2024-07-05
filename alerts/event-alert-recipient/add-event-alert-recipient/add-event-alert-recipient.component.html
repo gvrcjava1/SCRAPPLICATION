@@ -1,0 +1,151 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+
+<div class="content">
+    <div class="">
+        <div class="col-12">
+            <div class="breadcrumb-section">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Event Alert Recipient</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="clear"> </div>
+            <div class="row-fluid">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Event Alert Recipient Information</div>
+                    <div class="panel-body">
+                        <div id="forms" class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">{{title}} {{Titles.EVENT_ALERT_RECIPIENT_FORM}}</div>
+                                <div class="panel-body">
+                                    <div class="p-24">
+                                        <div fxLayout="column" fxLayoutAlign="start start" fxLayout.gt-md="row">
+                                            <form class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24"
+                                                fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto" name="form"
+                                                [formGroup]="addEventAlertRecipientFormGroup" (ngSubmit)="onAddEventAlertRecipientFormSubmit();">
+
+                                                <div class="col-md-12">
+
+                                                  <div class="col-md-3">
+                                                    <mat-form-field fxFlex="30">
+                                                        <input matInput placeholder="{{FiledLabels.NAME}}"
+                                                            [formControl]="addEventAlertRecipientFormGroup.controls['name']"
+                                                            required>
+                                                       
+                                                    <mat-error 
+                                                            *ngIf="addEventAlertRecipientFormGroup.controls['name'].hasError('maxlength') && addEventAlertRecipientFormGroup.controls['name'].touched"
+                                                             class="alert alert-danger">Max 250 characters only
+                                                             </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                  <mat-form-field fxFlex="30">
+                                                      <input matInput placeholder="{{FiledLabels.DESCRIPTION}}"
+                                                          [formControl]="addEventAlertRecipientFormGroup.controls['description']"
+                                                          required>
+                                                      <mat-error
+                                                          *ngIf="addEventAlertRecipientFormGroup.controls['description'].hasError('required') && addEventAlertRecipientFormGroup.controls['description'].touched"
+                                                          class="alert alert-danger">Enter Description</mat-error>
+
+                                                          <mat-error
+                                                      *ngIf="addEventAlertRecipientFormGroup.controls['description'].hasError('duplicateDescription')"
+                                                      class="alert alert-danger">
+                                                      Description Already Exist
+                                                  </mat-error>
+                                                  <mat-error
+                                                  *ngIf="addEventAlertRecipientFormGroup.controls['description'].hasError('duplicateDescriptionAndId')"
+                                                  class="alert alert-danger">
+                                                  Description Already Exists
+                                                </mat-error>
+                                                  <mat-error 
+                                                          *ngIf="addEventAlertRecipientFormGroup.controls['description'].hasError('maxlength') && addEventAlertRecipientFormGroup.controls['description'].touched"
+                                                           class="alert alert-danger">Max 250 characters only
+                                                           </mat-error>
+                                                  </mat-form-field>
+                                              </div>
+
+                                              <div class="col-md-3" >
+                                                <mat-form-field fxFlex="30" class="example-full-width">
+                                                  <mat-select placeholder="Event Id" 
+                                                    [formControl]="addEventAlertRecipientFormGroup.controls['eventTypeId']" (ngModelChange)="getEventTypeData()" required>
+                                                    <mat-option *ngFor="let eventTypeData of eventTypeData"
+                                                      [value]="eventTypeData.id">
+                                                      {{ eventTypeData.name }}
+                                                    </mat-option>
+                                                  </mat-select>
+                                                </mat-form-field>
+                                              </div>
+
+                                                
+                                                      <div class="col-md-3" >
+                                                        <mat-form-field fxFlex="30" class="example-full-width">
+                                                          <mat-select placeholder="Alert Group Id" 
+                                                            [formControl]="addEventAlertRecipientFormGroup.controls['alertGroupId']" (ngModelChange)="getAlertGroupData()" required>
+                                                            <mat-option *ngFor="let alertGroupData of alertGroupData"
+                                                              [value]="alertGroupData.id">
+                                                              {{ alertGroupData.name }}
+                                                            </mat-option>
+                                                          </mat-select>
+                                                          <mat-error *ngIf="addEventAlertRecipientFormGroup.controls['alertGroupId'].hasError('duplicateEventTypeIdAlertGroupId')" class="alert alert-danger">
+			                                                  Name And Event Type And Gruop  Already Exists
+			                                                </mat-error>
+                                                        </mat-form-field>
+                                                      </div>
+
+                                                      <div class="col-md-3" >
+                                                        <mat-form-field fxFlex="30" class="example-full-width">
+                                                          <mat-select placeholder="Alert Group Member Id" 
+                                                            [formControl]="addEventAlertRecipientFormGroup.controls['alertGroupMemberId']" (ngModelChange)="getAlertGroupMemberData()" required>
+                                                            <mat-option *ngFor="let alertGroupMemberData of alertGroupMemberData"
+                                                              [value]="alertGroupMemberData.id">
+                                                              {{ alertGroupMemberData.name }}
+                                                            </mat-option>
+                                                          </mat-select>
+                                                        </mat-form-field>
+                                                      </div>
+                                                      
+                                                    
+                                                   
+                                                </div>
+
+                                                <div class="clearfix"></div>
+                                                <div class="col-md-3 mt-15">
+                                                    <div class="float-right" style="float: right;">
+                                                        <button class="mat-raised-button mat-accent" color="accent"
+                                                            class="d-inline" mat-raised-button="" type="submit"
+                                                            [disabled]="addEventAlertRecipientFormGroup.invalid" *ngIf="save">
+                                                           {{title}}
+                                                        </button>
+                                                        <button class="mat-raised-button mat-accent  d-inline"
+                                                            color="accent" type="submit" [disabled]="addEventAlertRecipientFormGroup.invalid"
+                                                            mat-raised-button="" *ngIf="update">
+                                                            {{title}}
+                                                        </button>&nbsp;&nbsp;
+                                                        <span class="mat-raised-button mat-accent d-inline"
+                                                            (click)="onGoBack()" color="warn" mat-raised-button="">
+                                                            Back
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    </div>
+
+    

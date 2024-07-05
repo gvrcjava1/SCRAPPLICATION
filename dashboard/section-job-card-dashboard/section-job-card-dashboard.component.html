@@ -1,0 +1,91 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="content container-fluid">
+	<div class="row">
+		<div class="col-12">
+			<div class="breadcrumb-section">
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+						<li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Dashboard
+						</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Sections
+							Dash Board</li>
+					</ol>
+				</nav>
+			</div>
+			<div class="clear"></div>
+			<div class="row-fluid">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Sections Dash Board</div>
+					<div class="panel-body">
+						<div class="mat-elevation-z8">
+							<mat-table [dataSource]="sectionJobCardData" matSort>
+							<ng-container matColumnDef="loco"> 
+								<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.LOCO}} </mat-header-cell>
+								<mat-cell *matCellDef="let row"> {{row.locoId}}</mat-cell>
+							 </ng-container> 
+							 <ng-container matColumnDef="schedule"> 
+							 	<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.SCHEDULE}}</mat-header-cell>
+								<mat-cell *matCellDef="let row" style="cursor: pointer"> {{row.schedule}}</mat-cell>
+							</ng-container> 
+							<ng-container matColumnDef="beforeSchedule">
+								<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.BEFORE_SCHEDULE}}</mat-header-cell>
+								<mat-cell *matCellDef="let row"  [routerLink]="['update-section-job-card/'+row.id]"
+                                                style="max-width:70px;cursor: pointer; text-decoration: underline;font-weight: 600;color: #014884;" class="jobCardIdBox"  [style.background-color]="row.colorCode" > {{row.jobCardId}} </mat-cell> 
+							</ng-container> 
+							<ng-container matColumnDef="afterSchedule">
+								<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.AFTER_SCHEDULE}}</mat-header-cell>
+								<mat-cell *matCellDef="let row" style="cursor: pointer"> </mat-cell> 
+							</ng-container> 
+							<ng-container matColumnDef="verification">
+								<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.VERIFICATION}}</mat-header-cell>
+								<mat-cell *matCellDef="let row" style="cursor: pointer"> </mat-cell> 
+							</ng-container>
+							<ng-container matColumnDef="postReady">
+								<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.POST_READY}}</mat-header-cell>
+								<mat-cell *matCellDef="let row" style="cursor: pointer"> </mat-cell> 
+							</ng-container>
+							<mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+								<mat-row *matRowDef="let row; columns: displayColumns">
+								</mat-row> 
+							</mat-table>
+						</div>
+					</div>
+					<table class="table" >
+					<thead *ngIf="sectionJobCardStatusTypes">
+						<b style="color: red">{{FiledLabels.JOB_CARD_STATUS}}</b>
+						<tr style="border: 1px solid black;">
+							<th *ngFor="let attribute of sectionJobCardStatusTypes"
+								style="fontSize: 5px">
+								<span
+								class="box"
+								[ngStyle]="{'background-color':attribute.statusItemAttribute1}"></span>
+								<span [ngStyle]="{'font-size':'12px'}">{{attribute.statusItemCode}}</span>
+								
+							</th>
+						</tr>
+					</thead>
+				</table>
+				<table class="table" >
+					<thead *ngIf="LocoJobcardStatusTypes">
+						<b style="color: red">{{FiledLabels.LOCO_STATUS}}</b>
+						<tr style="border: 1px solid black;">
+							<th *ngFor="let attribute of LocoJobcardStatusTypes"
+								style="fontSize: 5px">
+								<span
+								class="box"
+								[ngStyle]="{'background-color':attribute.statusItemAttribute1}"></span>
+								<span [ngStyle]="{'font-size':'12px'}"> {{attribute.statusItemCode}}</span>
+							</th>
+						</tr>
+					</thead>
+				</table>
+					
+				</div>
+				
+				
+			</div>
+			
+		</div>
+	</div>
+</div>

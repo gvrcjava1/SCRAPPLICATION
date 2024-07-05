@@ -1,0 +1,10 @@
+.filter {
+    border: 1px solid;
+    padding: 10px;
+    box-shadow: 5px 10px 8px hsl(234, 74%, 15%);
+}
+.go-btn{
+    width: 10%; 
+    background:#004890;
+    color: #ffffff;
+}

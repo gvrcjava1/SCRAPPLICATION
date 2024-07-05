@@ -1,0 +1,351 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="clearfix"> </div>
+<div class="content container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="breadcrumb-section">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+                        <li class="breadcrumb-item"><a [routerLink]="['/energy']">Energy</a>
+                        <li class="breadcrumb-item active" aria-current="page">Energy Consumption</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <!-- body-->
+            <div class="clear"> </div>
+            <div class="row-fluid">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Energy Consumption Information</div>
+                    <div class="panel-body">
+                        <div class="p-24">
+                            <div class="col-sm-12 filter">
+                                <div class="col-md-3 form-group">
+                                    <mat-radio-group aria-label="Select an option" (change)="radioChange($event)">
+                                       <mat-radio-button *ngFor="let op of radioList" 
+                                        [checked]="op.checked" value="{{op.name}}" >{{ op.name}}</mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                                
+                                <div *ngIf="enableZone; else ZoneElseBlock">
+                                <div class="col-md-3">
+                                    <mat-form-field fxFlex="30" class="example-full-width">
+                                        <mat-select placeholder="{{FiledLabels.ZONE}}" (selectionChange)="getDivisions(zoneCode)" [(ngModel)]="zoneCode" >
+                                            <mat-option *ngFor="let facility of zoneData "
+                                                [value]="facility.zone">
+                                                {{ facility.zone}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                </div>
+                                <ng-template #ZoneElseBlock>
+                                    <div class = "col-md-3" >
+                                        <mat-form-field fxFlex="30">
+                                            <input matInput placeholder = "{{FiledLabels.ZONE}}" [(ngModel)]="zoneCode" readonly/>
+                                        </mat-form-field>
+                                      </div>
+                              </ng-template>  
+                              <div *ngIf="enableDivision else divisionElseBlock">
+                                <div class="col-md-3">
+                                    <mat-form-field fxFlex="30" class="example-full-width">
+                                        <mat-select placeholder="{{FiledLabels.DIVISION}}" (selectionChange)="updateDivision($event)" [(ngModel)]="divisionCode">
+                                            <mat-option *ngFor="let divisionsList of divisionsList "
+                                                [value]="divisionsList.division">
+                                                {{ divisionsList.facilityName}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                              </div>
+                                <ng-template #divisionElseBlock>
+	                                     <div class = "col-md-3" >
+	                                        <mat-form-field fxFlex="30">
+	                                            <input matInput placeholder = "{{FiledLabels.DIVISION}}" [(ngModel)]="divisionCode" readonly/>
+	                                        </mat-form-field>
+	                                      </div>
+                                </ng-template>
+                                <div class="col-md-3" >
+                                    <mat-form-field fxFlex="30" class="example-full-width">
+                                        <mat-select placeholder="{{FiledLabels.DEPOT}}" (selectionChange)="getTssFeeder()" [(ngModel)]="depotName">
+                                            <mat-option *ngFor="let depots of depotsList "
+                                                [value]="depots.facilityName">
+                                                {{ depots.facilityName}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3" *ngIf="exactDate">
+                                    <mat-form-field>
+                                        <input matInput [matDatepicker]="picker1" 
+                                            placeholder="{{FiledLabels.DATE}}"
+                                            [(ngModel)]="selectedExactDate" 
+                                            (dateChange)="exactDateEvent($event)"
+                                            [max]="maxDate">
+                                        <mat-datepicker-toggle matSuffix [for]="picker1">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #picker1></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+
+                                    <div class="col-md-3" *ngIf="!exactDate">
+                                        <mat-form-field fxFlex="30" class="example-full-width">
+                                            <mat-select placeholder="{{FiledLabels.FEEDER}}"
+                                                (selectionChange)="updateFeederName($event)" [(ngModel)]="feederId">
+                                                <mat-option *ngFor="let feeders of feedersList"
+                                                    [value]="feeders.feederId">
+                                                    {{ feeders.feederName }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3" *ngIf="!exactDate">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="picker3" placeholder="{{FiledLabels.FROM_DATE}}"
+                                                [(ngModel)]="selectedBWFrom" 
+                                                (dateChange)="bwFromDateEvent($event)"
+                                                [max]="maxDate">
+                                            <mat-datepicker-toggle matSuffix [for]="picker3">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #picker3></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3" *ngIf="!exactDate">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="picker2" placeholder="{{FiledLabels.TO_DATE}}"
+                                                [min]="selectedBWFrom" [(ngModel)]="selectedBWTo"
+                                                [max]="maxDate">
+                                            <mat-datepicker-toggle matSuffix [for]="picker2">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #picker2></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="clear"></div>
+                                <div class="col-md-12">
+                                    <button class="mat-raised-button mat-accent" color="mat-accent" class="d-inline go-btn pull-right"
+                                        mat-raised-button="" type="button" (click)="executeQuery()">
+                                        Go
+                                    </button>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="example-header">
+                                <div class="col-sm-4">
+                                    <mat-form-field>
+                                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" >
+                                    </mat-form-field>
+                                </div>
+                                <div class="clear"> </div>
+                            </div>
+
+                            <div class="table-sort-input example-container mat-elevation-z8 table-responsive">
+                                <table mat-table [dataSource]="filterData.dataSource" matSort>
+
+                                    <ng-container matColumnDef="sno">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="4">
+                                            <span>{{FiledLabels.S_NO}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            {{row.sno}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Feeder_Name">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.FEEDER}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            {{row.Feeder_Name}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Previous_Date">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.DATE}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            {{row.requestedReadingDate}} :
+                                            {{row.Previous_Date.slice(0,row.kwh_f)}}
+                                            <span style="color: red;">{{row.Previous_Date.slice(row.kwh_f,row.kwh_m)}}</span>
+                                            days )
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Multification_Factor">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.MF}} </span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row"> {{row.Multification_Factor}}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Joint_Reading">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.JMR}} </span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row"> {{row.jointMeter }}</td>
+                                    </ng-container>
+
+                               <ng-container matColumnDef="Old_KWH">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.KWH_OLD}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row"> 
+                                          <span style="color:#FF7F50">  {{row.Old_KWH}} </span>          
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Current_KWH">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span> {{FiledLabels.KWH_CURRENT}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <span style="color: blue;">{{row.Current_KWH}}</span>
+                                           
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Consumption_KWH">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.KWH_CONSUMPTION}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row"> <span style="color:#FF7F50">
+                                         {{row.Consumption_KWH}} </span></td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Old_KVAH">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.KVAH_OLD}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row"> <span style="color:#FF7F50;">
+                                            {{row.Old_KVAH}}
+                                            </span>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Current_KVAH">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.KVAH_CURRENT}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <span style="color: blue;">
+                                                {{row.Current_KVAH}}
+                                            </span>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Consumption_KVAH">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.KVAH_CONSUMPTION}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row"> 
+                                            <span style="color:#FF7F50"> {{row.Consumption_KVAH}}
+                                            </span></td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Old_RKVAH_Lag">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.RKVAH_LAG_OLD}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">  <span style="color:#FF7F50">
+                                        {{row.Old_RKVAH_Lag}}</span>
+                                        <td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Current_RKVAH_Lag">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.RKVAH_LAG_CURRENT}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <span style="color: blue;">
+                                                {{row.Current_RKVAH_Lag}}
+                                            </span>
+                                            <input mat-input *ngIf="row.editable" type="number" decimalNumber
+                                                [value]="row.Current_RKVAH_Lag" />
+                                        <td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Consumption_RKVAH_Lag">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.RKVAH_LAG_CONSUMPTION}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <span style="color:#FF7F50"> {{row.Consumption_RKVAH_Lag}}
+                                                </span>
+                                        <td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Old_RKVAH_Lead">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.RKVAH_LEAD_OLD}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row"> <span style="color:#FF7F50">
+                                         {{row.Old_RKVAH_Lead}} </span>
+                                        <td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Current_RKVAH_Lead">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.RKVAH_LEAD_CURRENT}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <span style="color: blue;">
+                                                {{row.Current_RKVAH_Lead}}
+                                            </span>
+                                          
+                                        <td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Consumption_RKVAH_Lead">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.RKVAH_LEAD_CONSUMPTION}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <span style="color:#FF7F50">
+                                                 {{row.Consumption_RKVAH_Lead}}
+                                                 </span>
+                                        <td>
+                                    </ng-container>
+
+                                     <ng-container matColumnDef="actions">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            <span>{{FiledLabels.ACTIONS}}</span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let row">
+                                            <a mat-icon-button matTooltip="Edit"
+                                                *ngIf="editPermission && !row.editable">
+                                                <button mat-icon-button matTooltip="Edit"
+                                                    (click)="processEditAction(row)">
+                                                    <mat-icon style="color: rgb(0, 145, 234);">edit</mat-icon>
+                                                </button>
+                                            </a>
+                                            <a mat-icon-button matTooltip="Save" *ngIf="editPermission && row.editable">
+                                                <button mat-icon-button matTooltip="Save"
+                                                    (click)="processUpdateAction(row.id)">
+                                                    <mat-icon style="color: rgb(0, 145, 234);">save</mat-icon>
+                                                </button>
+                                            </a>
+                                            <a mat-icon-button matTooltip="Cancel"
+                                                *ngIf="editPermission && row.editable">
+                                                <button mat-icon-button matTooltip="Cancel"
+                                                    (click)="processCancelAction(row)">
+                                                    <mat-icon style="color: rgb(0, 145, 234);">cancel</mat-icon>
+                                                </button>
+                                            </a>
+                                        <td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                                    </tr>
+                                </table>
+
+                                <mat-paginator [pageSizeOptions]="pagination"></mat-paginator>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,319 @@
+<div class="content container-fluid">
+		<div class="col-12">
+			<div class="breadcrumb-section">
+	            <nav aria-label="breadcrumb">
+	                <ol class="breadcrumb">
+	                        <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+	                        <!-- <li class="breadcrumb-item"><a [routerLink]="['/energyBillPayment']">Energy Bill Payment </a></li> -->
+	                        <li class="breadcrumb-item"><a [routerLink]="['/energy']">Energy</a>
+	                          <li class="breadcrumb-item active" aria-current="page">Traction Energy Tariff</li>
+	                </ol>
+	            </nav>
+	          </div>
+			<div class="clear"></div>
+			<div class="row-fluid">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Traction Energy Tariff Information</div>
+						<div class="panel-body">
+							<div id="forms" class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+								<div class="p-24">
+									<div fxLayout="column" fxLayoutAlign="start start" fxLayout.gt-md="row">
+										<div class="p-24">
+											<div class="example-header">
+		                                        <div class="col-sm-4">
+		                                            <mat-form-field>
+		                                              <input class="filter" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+		                                            </mat-form-field>
+		                                        </div>
+		                                        <div  style="text-align: right;  padding-top: 12px;" *ngIf="addPermission">
+													<span class="mat-raised-button mat-accent" (click)="addNewTractionEnergyTariff()" *ngIf="!addTractionEnergyTariff"
+		                                              color="accent" mat-raised-button="">
+		                                              Add Traction Energy Tariff
+		                                            </span>
+		                                        </div>
+	                                    	</div>
+										
+										</div>
+										<div class="clear"></div>
+										    
+                                            <form class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24" *ngIf="addTractionEnergyTariff" fxLayout="column"
+                                                fxLayoutAlign="start" [formGroup]="tractionEnergyTariffFormGroup" fxFlex="1 0 auto"
+                                                (ngSubmit)="onTractionEneTariffSubmit();">
+                                            	<div class="panel panel-primary">
+                                            		<div class="panel-heading">{{title}} {{Titles.TRACTION_ENERGY_TARIFF}}</div>
+	                                            		<div class="panel-body">
+	                                                    <div class="col-md-12">
+	                                                        <!-- <div class="col-md-3">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput placeholder="Supplier" [formControl]="tractionEnergyTariffFormGroup.controls['supplier']" />
+	                                                            </mat-form-field>
+	                                                        </div> -->
+	                                                        <div class="col-md-3" *ngIf="enableSupplier; else supplierElseBlock">
+									                            <mat-form-field fxFlex="30">
+									                              <mat-select placeholder="{{FiledLabels.SUPPLIER}}" formControlName="supplier" required >
+									                                <mat-option *ngFor="let eleEngSupplier of eleEnergySuppliersList" [value]="eleEngSupplier.code">
+									                                  {{ eleEngSupplier.code}}
+									                                </mat-option>
+									                              </mat-select>
+									                              <mat-error
+										                            *ngIf="tractionEnergyTariffFormGroup.controls['supplier'].hasError('duplicateFromDate')" 
+										                            class="alert alert-danger" >
+										                                Supplier And Date Combination Already Exists
+										                        </mat-error>
+									                            </mat-form-field>
+									                          </div>
+									                          <ng-template #supplierElseBlock>
+																  <div class = "col-md-2" >
+                                                      				<mat-form-field fxFlex="30">
+                                                      					<input matInput placeholder = "{{FiledLabels.SUPPLIER}}" formControlName="supplier" required [readonly]="true"/>
+                                                      				</mat-form-field>
+                                                      			  </div>
+															</ng-template> 
+	                                                        <!-- <div class="col-md-3">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput placeholder="year" [formControl]="tractionEnergyTariffFormGroup.controls['year']" />
+	                                                            </mat-form-field>
+	                                                        </div> -->
+	                                                        <div class="col-md-3">
+	                                                            <mat-form-field fxFlex="30">
+	                                                            	<input matInput [owlDateTime]="dt1" style="width: 94%;"
+                                                                [owlDateTimeTrigger]="dt1" placeholder="{{FiledLabels.FROM_DATE}}"
+                                                                (dateTimeChange)="addEvent($event)" 
+                                                                [max] = "maxDate"
+                                                                [formControl]="tractionEnergyTariffFormGroup.controls['fromDate']" required>                                                                
+                                                                <owl-date-time #dt1 [showSecondsTimer]=true
+                                                                    ></owl-date-time>
+                                                                <span [owlDateTimeTrigger]="dt1"><i class="fa fa-calendar"></i></span>
+                                                                <mat-error
+										                            *ngIf="tractionEnergyTariffFormGroup.controls['fromDate'].hasError('duplicateFromDate')" 
+										                            class="alert alert-danger" >
+										                                Supplier And Date Combination Already Exists
+										                        </mat-error>
+										                        <mat-error
+										                            *ngIf="tractionEnergyTariffFormGroup.controls['fromDate'].hasError('duplicateFromDateAndId')" 
+										                            class="alert alert-danger" >
+										                                Supplier And Date Combination Already Exists
+										                        </mat-error>
+	                                                                <!-- <input matInput [matDatepicker]="fromDate" placeholder="Choose From Date" [formControl]="tractionEnergyTariffFormGroup.controls['fromDate']">
+	                                                                    <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+	                                                                    <mat-datepicker #fromDate  ></mat-datepicker> (yearSeleceted)="close($event)" -->
+	                                                              </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-3">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <input matInput placeholder="{{FiledLabels.RATE}}" decimalNumber [formControl]="tractionEnergyTariffFormGroup.controls['rate']" required/>
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-3">
+	                                                            <mat-form-field fxFlex="30">
+	                                                            	<input matInput [owlDateTime]="dt2" style="width: 94%;"
+                                                                [owlDateTimeTrigger]="dt2" placeholder="{{FiledLabels.THRU_DATE}}"
+                                                                [min] = "toMinDate"
+                                                                [formControl]="tractionEnergyTariffFormGroup.controls['thruDate']" >                                                                
+                                                                <owl-date-time #dt2 [showSecondsTimer]=true
+                                                                    ></owl-date-time>
+                                                                <span [owlDateTimeTrigger]="dt2"><i class="fa fa-calendar"></i></span>
+	                                                              </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-3">
+	                                                            <mat-form-field fxFlex="30">
+	                                                                <textarea textareaAutoresize matInput placeholder="{{FiledLabels.SPECIFICATION}}" 
+	                                                                [formControl]="tractionEnergyTariffFormGroup.controls['specification']"
+	                                                                pattern="^[a-zA-Z0-9,\s._-]+(\s[a-zA-Z0-9,._-]+)?$" ></textarea>
+	                                                                <!-- <input matInput placeholder="Specification" [formControl]="tractionEnergyTariffFormGroup.controls['specification']" /> -->
+	                                                                <mat-error
+		                                                                *ngIf="tractionEnergyTariffFormGroup.controls['specification'].hasError('maxlength')"
+		                                                                class="alert alert-danger">Max 250 characters only
+		                                                            </mat-error>
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-3">
+	                                                            <mat-form-field fxFlex="30">
+	                                                            	<textarea textareaAutoresize matInput placeholder="{{FiledLabels.CONDITION}}" 
+	                                                            	[formControl]="tractionEnergyTariffFormGroup.controls['condition']" 
+	                                                            	pattern="^[a-zA-Z0-9,\s._-]+(\s[a-zA-Z0-9,._-]+)?$" ></textarea>
+	                                                                <!-- <input matInput placeholder="Condition" [formControl]="tractionEnergyTariffFormGroup.controls['condition']" /> -->
+	                                                                <mat-error
+		                                                                *ngIf="tractionEnergyTariffFormGroup.controls['condition']"
+		                                                                class="alert alert-danger">Max 250 characters only
+		                                                            </mat-error>
+	                                                            </mat-form-field>
+	                                                        </div>
+	                                                        <div class="col-md-3 mt-15">
+	                                                                <div fxFlex="10" fxLayoutAlign="center center" style="padding-bottom:10px;" class="pr-5 d-inline">
+	                                                                    <button mat-raised-button color="accent" [disabled]="tractionEnergyTariffFormGroup.invalid"
+	                                                                        class="submit-button" aria-label="Submit">
+	                                                                        {{title}}
+	                                                                    </button>
+	                                                                </div>
+	                                                                <div class="p-12 d-inline">
+	                                                                    <span class="mat-raised-button mat-warn" (click)="onGoBack()" color="warn"
+	                                                                      mat-raised-button="">
+	                                                                      Back
+	                                                                    </span>
+	                                                                  </div>
+	                                                        </div>
+	                                                    </div>
+	                                                    <div class="col-md-12">
+	                                                    </div>
+	                                                </div>
+                                            	</div>    
+                                            </form>    
+										</div>
+										<div class = "p-24">
+											<form [formGroup]="contentManagementFormGroup" novalidate
+						                        (ngSubmit)="onContentManagementSubmit()" *ngIf="uploadFile">
+						                        <div class="col-md-12">
+						                          <!--   <div class="col-md-3">
+						                             <mat-form-field fxFlex="30">
+						                              <mat-select placeholder="Content Category" formControlName="contentCategory">
+						                                <mat-option *ngFor="let contentCategory of contentCategoryList" [value]="contentCategory.code">
+						                                  {{ contentCategory.code}}
+						                                </mat-option>
+						                              </mat-select>
+						                              <mat-error *ngIf="isSubmit && f.contentCategory.errors && f.contentCategory.errors.required"
+						                                class="alert alert-danger">Select Content Category</mat-error>
+						                            </mat-form-field>
+						                          </div>
+						                          <div class="col-md-3">
+						                            <mat-form-field fxFlex="30">
+						                              <mat-select placeholder="Content Topic" formControlName="contentTopic" >
+						                                <mat-option *ngFor="let contentTopic of contentTopicList" [value]="contentTopic.code">
+						                                  {{ contentTopic.code}}
+						                                </mat-option>
+						                              </mat-select>
+						                              <mat-error *ngIf="isSubmit && f.contentTopic.errors && f.contentTopic.errors.required"
+						                                class="alert alert-danger">Select Content Topic</mat-error>
+						                            </mat-form-field>
+						                          </div> -->
+						                          <div class="col-md-3">
+						                            <mat-form-field fxFlex="30">
+						                              <!-- <input matInput placeholder="Description" formControlName="description"
+						                                required /> -->
+						                              <textarea matInput placeholder="{{FiledLabels.DESCRIPTION}}" [formControl]="contentManagementFormGroup.controls['description']" required></textarea>
+						                              <mat-error *ngIf="f.description.errors && f.description.errors.required"
+						                                class="alert alert-danger">Description required</mat-error>
+						                              <mat-error *ngIf="f.description.errors && f.description.errors.pattern"
+						                                class="alert alert-danger">Only alphabets allowed
+						                              </mat-error>
+						                            </mat-form-field>
+						                          </div>
+						                      </div>
+						                      <div class="clear"> </div>
+						                        <div class="col-md-12">
+													<input type="file"  formControlName="uploadFiles" name="uploadFile" id="uploadFile" 
+													accept="image/*,.pdf,.doc,.docx,.csv,application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, .xlsx, .xls,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+													multiple (change)="upload($event)" />
+						                            <mat-error *ngIf="f.uploadFiles.errors && f.uploadFiles.errors.required"
+						                                class="alert alert-danger">File required</mat-error>
+						                      	</div>
+						                      	<div>
+					                              <table class="table" *ngIf="filesExists">
+					                                <thead>
+					                                  <th>Sno</th>
+					                                  <th>File Name</th>
+					                                  <th>Size</th>
+					                                  <th>Action</th>
+					                                </thead>
+					                                <tbody id="uploadedFilesTBodyId">
+					                                    <tr *ngFor="let file of selectedFiles;let i=index">
+					                                        <td>{{i+1}}</td>
+					                                        <td>{{file.name}}</td>
+					                                        <td>{{(file.size/1024) | number : '1.2-2'}} MB</td>
+					                                        <td> <button mat-icon-button matTooltip="Delete" (click)="removeFile(i)">
+					                                          <mat-icon style="color: rgb(244, 67, 54);">delete</mat-icon>
+					                                      </button>  </td>
+					                                    </tr>
+					                                </tbody>
+					                              </table>
+					                            </div>
+						                      <button *ngIf="addEnable" class="mat-raised-button mat-accent" color="accent" class="d-inline"
+							                        mat-raised-button="" [disabled]="contentManagementFormGroup.invalid" type="submit">
+							                       {{title}}
+							                    </button>&nbsp;
+							                    <div class="p-12 d-inline">
+	                                                                    <span class="mat-raised-button mat-warn" (click)="close()" color="warn"
+	                                                                      mat-raised-button="">
+	                                                                      Close
+	                                                                    </span>
+	                                                                  </div>      
+						                    </form>      
+										</div> 
+										
+                                    	<div class="clear"> </div>
+                                    	<div class="mat-elevation-z8">
+                                    		<mat-table [dataSource]="tractionEnergyTariffDataSource" matSort>
+                                    			<ng-container matColumnDef="sno">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.S_NO}}</mat-header-cell>
+	                                                <mat-cell *matCellDef="let row"> {{row.sno}}</mat-cell>
+	                                            </ng-container>
+	                                            <ng-container matColumnDef="supplier">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.SUPPLIER}}</mat-header-cell>
+	                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+	                                                  {{row.supplier}}</mat-cell>
+	                                            </ng-container>
+	                                            <!-- <ng-container matColumnDef="year">
+	                                                    <mat-header-cell *matHeaderCellDef mat-sort-header>year</mat-header-cell>
+	                                                    <mat-cell *matCellDef="let row" style="cursor: pointer">
+	                                                      {{row.year}}</mat-cell>
+	                                            </ng-container> -->
+	                                            <ng-container matColumnDef="rate">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.RATE}}</mat-header-cell>
+	                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+	                                                  {{row.rate}}</mat-cell>
+	                                            </ng-container>
+	                                            <ng-container matColumnDef="fromDate">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.FROM_DATE}}</mat-header-cell>
+	                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+	                                                  {{row.fromDate}}</mat-cell>
+	                                            </ng-container>
+	                                            <ng-container matColumnDef="thruDate">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.THRU_DATE}}</mat-header-cell>
+	                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+	                                                  {{row.thruDate}}</mat-cell>
+	                                            </ng-container>
+	                                           <ng-container matColumnDef="specification">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.SPECIFICATION}}</mat-header-cell>
+	                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+	                                                  {{row.specification}}</mat-cell>
+	                                            </ng-container>
+	                                            <ng-container matColumnDef="condition">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.CONDITION}}</mat-header-cell>
+	                                                <mat-cell *matCellDef="let row" style="cursor: pointer">
+	                                                  {{row.condition}}</mat-cell>
+	                                            </ng-container>
+	                                            <ng-container matColumnDef="id">
+	                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.ACTIONS}}</mat-header-cell>
+	                                                    <mat-cell *matCellDef="let row">
+	                                                      <a mat-icon-button matTooltip="Edit" *ngIf="editPermission"
+	                                                        (click)="editTractionEneTariff(row.id)">
+	                                                        <mat-icon style="color: rgb(0, 145, 234);">edit</mat-icon>
+	                                                      </a>
+	                                                      <a mat-icon-button matTooltip="attach file" *ngIf="editPermission"
+	                                                        (click)="fileUpload(row.id)">
+	                                                        <mat-icon style="color: rgb(0, 145, 234);">attach_file</mat-icon>
+	                                                      </a>
+	                                                      <button mat-icon-button matTooltip="Document View"
+			                                                    (click)="viewDocumentDetails(row.id)" > <!--*ngIf="row.contentLink ; else elseBlock"-->
+			                                                    <mat-icon style="color: rgb(0, 145, 234);">visibility</mat-icon>
+			                                               </button>
+			                                              <!--  <ng-template #elseBlock><mat-icon></mat-icon></ng-template> -->
+	                                                      <button mat-icon-button matTooltip="Delete" *ngIf="deletePermission"
+	                                                        (click)="deleteTractionEneTariff(row.id)">
+	                                                        <mat-icon style="color: rgb(244, 67, 54);">delete</mat-icon>
+	                                                      </button>
+	                                                    </mat-cell>
+	                                            </ng-container>
+	                                            <mat-header-row *matHeaderRowDef="TractionEneTariffDisplayedColumns"></mat-header-row>
+                                            	<mat-row *matRowDef="let row; columns: TractionEneTariffDisplayedColumns">
+                                            	</mat-row>
+                                    		</mat-table>
+                                    		<mat-paginator [pageSizeOptions]="pagination"></mat-paginator>
+                                    	</div>
+								</div>
+							</div>
+						</div>				
+				</div>
+			</div>
+		</div>
+	</div>

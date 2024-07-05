@@ -1,0 +1,44 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="content container-fluid">
+  <div class="row">
+    <div class="col-12">
+     
+      <div class="clear"></div>
+      <div class="row-fluid" >
+
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">Energy Graphs</div>
+          <div class="panel-body">
+            <div class="col-12">
+	            <div class="col-md-6 col-lg-6">
+	              <div class="panel panel-primary">
+	                <div class="panel-heading">Day Wise</div>
+	                <div class="panel-body">
+	                  <div class="col-md-6 col-lg-6" *ngIf="showEnergyChart">
+		                  <fusioncharts [width]="width" [height]="height" [type]="type" [dataFormat]="dataFormat"
+		                    [dataSource]="energyDataSource"
+		                    >
+		                  </fusioncharts>
+	                 </div>
+	                </div>
+	              </div>
+	            </div>
+	            <div class="col-md-6 col-lg-6">
+	            	<div class="panel panel-primary">
+	                	<div class="panel-heading">Division Wise</div>
+	                		<div class="panel-body">
+	                  			<div class="col-md-6 col-lg-6" *ngIf="showDivWiseEnergyConsumEntryPending">
+		                  			<fusioncharts [width]="divWiseWidth" [height]="height" [type]="pieType" [dataFormat]="dataFormat"
+		                    			[dataSource]="divWiseEntryPendingDataSource"
+		                    		>
+		                  			</fusioncharts>
+	                 			</div>
+	                		</div>
+	              	</div>
+	           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

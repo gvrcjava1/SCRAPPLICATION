@@ -1,0 +1,181 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="content container-fluid">
+	<div class="row">
+		<div class="col-12">
+			<div class="breadcrumb-section">
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+						<li class="breadcrumb-item"
+							*ngIf="requestType == 'Schedule Progress' ; else driveProgressElseBlock"><a
+								[routerLink]="['/ashd']">SCH Maintainance</a></li>
+						<ng-template #driveProgressElseBlock>
+							<li class="breadcrumb-item"><a [routerLink]="['/drives']">Drives </a></li>
+						</ng-template>
+						<li class="breadcrumb-item active" aria-current="page">{{breadCrumb}}</li>
+					</ol>
+				</nav>
+			</div>
+			<div class="clear"> </div>
+			<div class="row-fluid">
+				<div class="panel panel-primary">
+					<div class="panel-heading">{{titleName}}</div>
+					<div class="panel-body">
+						<div fxLayout="column" fxLayoutAlign="start start" fxLayout.gt-md="row">
+							<form class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24" fxLayout="column"
+								fxLayoutAlign="start" fxFlex="1 0 auto" name="form" [formGroup]="searchInputFormGroup"
+								(ngSubmit)="getDriveDailyProgress();">
+								<div class="col-md-3">
+									<mat-form-field>
+										<input matInput [matDatepicker]="picker1"
+											placeholder="{{FiledLabels.FROM_DATE}}" [max]="maxDate"
+											[formControl]="searchInputFormGroup.controls['fromDate']" required>
+										<mat-datepicker-toggle matSuffix [for]="picker1">
+										</mat-datepicker-toggle>
+										<mat-datepicker #picker1></mat-datepicker>
+									</mat-form-field>
+								</div>
+								<div class="col-md-3">
+									<mat-form-field fxFlex="30" class="example-full-width">
+										<mat-select placeholder="{{FiledLabels.DEPOT}}"
+											[formControl]="searchInputFormGroup.controls['facilityId']" required>
+											<mat-option *ngFor="let depot of depotsList" [value]="depot.facilityId">
+												{{ depot.facilityName }}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+								</div>
+								<div class="col-md-3 mt-15">
+									<div class="float-right" style="float: right;">
+										<button class="mat-raised-button mat-accent" color="accent" class="d-inline"
+											mat-raised-button="" type="submit"
+											[disabled]="searchInputFormGroup.invalid">Submit</button>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="clear"> </div>
+						<div class="mat-elevation-z8">
+							<mat-table [dataSource]="dataSource" matSort>
+								<ng-container matColumnDef="sno">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.S_NO}}
+									</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.sno}}</mat-cell>
+								</ng-container>
+
+								<ng-container matColumnDef="drive">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.DRIVE}}
+									</mat-header-cell>
+									<mat-cell *matCellDef="let row">
+										{{row.name}}
+									</mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="description">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.DESCRIPTION}}
+									</mat-header-cell>
+									<mat-cell *matCellDef="let row">
+										{{row.description}}
+									</mat-cell>
+								</ng-container>
+								<div *ngIf="requestType != 'Schedule Progress' ">
+									<ng-container matColumnDef="assetType">
+										<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.ASSET_TYPE}}
+										</mat-header-cell>
+										<mat-cell *matCellDef="let row">
+											{{row.assetType}}
+										</mat-cell>
+									</ng-container>
+								</div>
+								<ng-container matColumnDef="population">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.POPULATION}}
+									</mat-header-cell>
+									<mat-cell *matCellDef="let row">
+										{{row.population}}
+									</mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="target">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.TARGET}}
+									</mat-header-cell>
+									<mat-cell *matCellDef="let row">
+										{{row.target}}
+									</mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="alreadyDone">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>
+										{{FiledLabels.ALREADY_DONE_APPROVE}}</mat-header-cell>
+									<mat-cell *matCellDef="let row">
+										{{row.alreadyDone}} ({{row.approveCount}})
+
+									</mat-cell>
+								</ng-container>
+
+								<ng-container matColumnDef="performedCount">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.PERFORMED_COUNT}}
+									</mat-header-cell>
+									<ng-container *matCellDef="let row">
+										<mat-cell *ngIf="row.isIdRequired =='Yes' ; else idReqElseBlock">
+											<mat-form-field fxFlex="30">
+												<input matInput placeholder="{{FiledLabels.PERFORMED_COUNT}}"
+													[value]="row.performedCount" [(ngModel)]="row.performedCount"
+													readonly>
+											</mat-form-field>
+										</mat-cell>
+										<ng-template #idReqElseBlock>
+											<mat-cell>
+												<mat-form-field fxFlex="30">
+													<input matInput placeholder="{{FiledLabels.PERFORMED_COUNT}}"
+														[value]="row.performedCount" (keypress)="numberOnly($event)"
+														[(ngModel)]="row.performedCount">
+												</mat-form-field>
+											</mat-cell>
+										</ng-template>
+									</ng-container>
+								</ng-container>
+
+								<ng-container matColumnDef="ids">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.IDS}}
+									</mat-header-cell>
+									<ng-container *matCellDef="let row">
+										<mat-cell *ngIf="row.isIdRequired =='Yes' ; else idRequiredElseBlock">
+											<button mat-raised-button (click)="assetIdsDialog(row)">assetId</button>
+										</mat-cell>
+										<ng-template #idRequiredElseBlock>
+											<mat-cell></mat-cell>
+										</ng-template>
+									</ng-container>
+								</ng-container>
+
+								<ng-container matColumnDef="actions">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>{{FiledLabels.ACTIONS}}
+									</mat-header-cell>
+									<ng-container *matCellDef="let row">
+										<mat-cell *ngIf="row.isIdRequired =='Yes' ; else idRequiredElseBlock">
+											<button mat-icon-button matTooltip="Details" (click)="viewDialog(row.id)">
+												<mat-icon style="color: rgb(0, 145, 234);">view_list</mat-icon>
+											</button>
+										</mat-cell>
+										<ng-template #idRequiredElseBlock>
+											<button mat-icon-button matTooltip="Details" (click)="viewDialog(row.id)">
+												<mat-icon style="color: rgb(0, 145, 234);">view_list</mat-icon>
+											</button>
+											<a mat-icon-button matTooltip="Save">
+												<button mat-icon-button matTooltip="Save"
+													(click)="processSaveAction(row)">
+													<mat-icon style="color: rgb(0, 145, 234);">save</mat-icon>
+												</button>
+											</a>
+										</ng-template>
+									</ng-container>
+
+								</ng-container>
+								<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+								<mat-row *matRowDef="let row; columns: displayedColumns;">
+								</mat-row>
+							</mat-table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

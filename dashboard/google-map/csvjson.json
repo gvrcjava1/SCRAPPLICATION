@@ -1,0 +1,104 @@
+[
+  {
+    "lat": 17.2228647,
+    "lng": 77.4557351,
+    "label": "SC_MVH NAW",
+    "draggable": true
+  },
+  {
+    "lat": 16.8197395,
+    "lng": 80.4769344,
+    "label": "sc_yp",
+    "draggable": true
+  },
+  {
+    "lat": 18.9191936,
+    "lng": 79.4572835,
+    "label": "sc_mmz-mci",
+    "draggable": true
+  },
+  {
+    "lat": 18.1524764,
+    "lng": 79.4826198,
+    "label": "sc_opl-hsp",
+    "draggable": true
+  },
+  {
+    "lat": 17.0672647,
+    "lng": 80.2343933,
+    "label": "sc_nvc to bkl",
+    "draggable": true
+  },
+  {
+    "lat": 16.9800023,
+    "lng": 80.3038445,
+    "label": "sc_bkl tomtmi",
+    "draggable": true
+  },
+  {
+    "lat": 16.9112093,
+    "lng": 80.3807634,
+    "label": "sc_mdr",
+    "draggable": true
+  },
+  {
+    "lat": 17.4012757,
+    "lng": 80.167878,
+    "label": "sc_ppy/dkj",
+    "draggable": true
+  },
+  {
+    "lat": 18.4712805,
+    "lng": 79.4388855,
+    "label": "sc_oea-kolr",
+    "draggable": true
+  },
+  {
+    "lat": 19.1384654,
+    "lng": 79.4528262,
+    "label": "sc_bpa-rech",
+    "draggable": true
+  },
+  {
+    "lat": 19.0642851,
+    "lng": 79.483893,
+    "label": "sc_bpa yard",
+    "draggable": true
+  },
+  {
+    "lat": 18.0652651,
+    "lng": 79.5050745,
+    "label": "sc_hsp-kmtp",
+    "draggable": true
+  },
+  {
+    "lat": 17.1392431,
+    "lng": 77.1561813,
+    "label": "sc_ct mqr",
+    "draggable": true
+  },
+  {
+    "lat": 17.4502793,
+    "lng": 78.1049718,
+    "label": "sc_ggd-skp",
+    "draggable": true
+  },
+  {
+    "lat": 17.4736413,
+    "lng": 78.382895,
+    "label": "sc_hfz-htcy",
+    "draggable": true
+  },
+  {
+    "lat": 17.5722936,
+    "lng": 78.9742823,
+    "label": "sc_wp-rag",
+    "draggable": true
+  },
+  {
+    "lat": 17.9763305,
+    "lng": 79.5454158,
+    "label": "sc_wl-kzj",
+    "draggable": true
+  }  
+]

@@ -1,0 +1,184 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+
+<div class="content">
+    <div class="">
+        <div class="col-12">
+            <div class="breadcrumb-section">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+                        <li class="breadcrumb-item"><a [routerLink]="['/drives']">Drives </a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Checklist</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="clear"> </div>
+            <div class="row-fluid">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Checklist Information</div>
+                    <div class="panel-body">
+                        <div id="forms" class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">{{title}} {{Titles.CHECK_LIST_FORM}}</div>
+                                <div class="panel-body">
+                                    <div class="p-24">
+                                        <div fxLayout="column" fxLayoutAlign="start start" fxLayout.gt-md="row">
+
+                                            <form class="mat-white-bg mat-elevation-z4 p-24 mr-24 mb-24"
+                                                fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto" name="form"
+                                                [formGroup]="addDriveChecklistFormGroup" (ngSubmit)="onAddDriveChecklistFormSubmit();">
+
+                                                <div class="col-md-12">
+
+                                                    <!-- DRIVE -->
+                                                    <div class="col-md-3">
+                                                        <mat-form-field fxFlex="30" class="example-full-width">
+                                                            <mat-select placeholder="{{FiledLabels.DRIVE}}"
+                                                                [formControl]="addDriveChecklistFormGroup.controls['drive']" required>
+                                                                <mat-option *ngFor="let drive of driveList"
+                                                                    [value]="drive.id">
+                                                                    {{ drive.name }}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                            <mat-error
+                                                                *ngIf="addDriveChecklistFormGroup.controls['drive'].hasError('required') && addDriveChecklistFormGroup.controls['drive'].touched"
+                                                                class="alert alert-danger">Select Drive</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+                                                
+                                                    <div class="col-md-3">
+                                                        <mat-form-field fxFlex="30">
+                                                          <mat-select placeholder="{{FiledLabels.ACTIVITY_TYPE}}" [formControl]="addDriveChecklistFormGroup.controls['activityType']" (selectionChange)="findMeasureActivityList()" >
+                                                            <mat-option value="measurement">measurement</mat-option>
+                                                            <mat-option value="activity">activity</mat-option>
+                                                            </mat-select>               
+                                                            
+                                                        </mat-form-field>
+                                                    </div> 
+                                                   
+
+                                                    <!-- measureActivityList -->
+                                                    <div class="col-md-3">
+                                                        <mat-form-field fxFlex="30" class="example-full-width">
+                                                            <mat-select placeholder="{{FiledLabels.MEASURE_ACTIVITY_LIST}}"
+                                                                [formControl]="addDriveChecklistFormGroup.controls['measureActivityList']" required>
+                                                                <mat-option *ngFor="let measureActivity of measureActivityList"
+                                                                    [value]="measureActivity.activityId">
+                                                                    {{ measureActivity.activityName }}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                            <mat-error
+                                                                        *ngIf="addDriveChecklistFormGroup.controls['measureActivityList'].hasError('duplicateDriveActivityList') && addDriveChecklistFormGroup.controls['measureActivityList'].touched"
+                                                                        class="alert alert-danger" >
+                                                                           drive And Activity Already Exists
+                                                                    </mat-error> 
+                                                            <mat-error
+                                                                *ngIf="addDriveChecklistFormGroup.controls['measureActivityList'].hasError('required') && addDriveChecklistFormGroup.controls['measureActivityList'].touched"
+                                                                class="alert alert-danger">Select Measure Activity List</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+
+                                                     <div class="col-md-3">
+                                                        <mat-form-field fxFlex="30" class="example-full-width">
+                                                            <mat-select placeholder="{{FiledLabels.ACTIVITY_POSITION_ID}}" 
+                                                                [formControl]="addDriveChecklistFormGroup.controls['activityPositionId']" required>
+                                                                <mat-option *ngFor="let measure of activityPositionList"
+                                                                        [value]="measure.measureActivity">
+                                                                        {{ measure.measureActivity }}
+                                                                    </mat-option>
+                                                            </mat-select>   
+                                                            <mat-error
+                                                                        *ngIf="addDriveChecklistFormGroup.controls['activityPositionId'].hasError('duplicateDrivePositionId')" 
+                                                                        class="alert alert-danger" >
+                                                                           drive And position Already Exists
+                                                                    </mat-error>                                                      
+                                                                                                                     
+                                                        </mat-form-field>
+                                                
+                                                </div> 
+
+                                                    <!-- DISPLAY ORDER -->
+                                                    <div class="col-md-3">
+                                                        <mat-form-field fxFlex="30">
+                                                            <input matInput placeholder="{{FiledLabels.DISPLAY_ORDER}}" numbersOnly                                                              
+                                                                [formControl]="addDriveChecklistFormGroup.controls['displayOrder']"
+                                                                >
+                                                            <mat-error
+                                                                *ngIf="addDriveChecklistFormGroup.controls['displayOrder'].hasError('required') && addDriveChecklistFormGroup.controls['displayOrder'].touched"
+                                                                class="alert alert-danger">Enter Display Order</mat-error>
+                                                         </mat-form-field>
+                                                    </div>
+
+                                                       <!-- LOWER LIMIT -->
+                                                       <div class="col-md-3">
+                                                        <mat-form-field fxFlex="30">
+                                                            <input matInput placeholder="{{FiledLabels.LOWER_LIMIT}}" decimalNumber
+                                                                [formControl]="addDriveChecklistFormGroup.controls['lowerLimit']"
+                                                                >                                                           
+                                                        </mat-form-field>
+                                                    </div>
+
+                                                    <!-- UPPER LIMIT -->
+                                                    <div class="col-md-3">
+                                                        <mat-form-field fxFlex="30">
+                                                            <input matInput placeholder="{{FiledLabels.UPPER_LIMIT}}" decimalNumber
+                                                                [formControl]="addDriveChecklistFormGroup.controls['upperLimit']"
+                                                                >                                                            
+                                                        </mat-form-field>
+                                                    </div>
+
+                                                 
+                                                    
+                                                    <!-- STATUS -->
+                                                    <div class="col-md-3">
+                                                        <mat-form-field fxFlex="30">
+                                                            <mat-select placeholder="{{FiledLabels.STATUS}}"
+                                                                [formControl]="addDriveChecklistFormGroup.controls['status']">
+                                                                <mat-option *ngFor="let status of statusList"
+                                                                    [value]="status.statusCode">
+                                                                    {{ status.statusCode}}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                            <mat-error
+                                                                *ngIf="addDriveChecklistFormGroup.controls['status'].hasError('required') && addDriveChecklistFormGroup.controls['status'].touched"
+                                                                class="alert alert-danger">Select Status</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="clearfix"></div>
+                                                <div class="col-md-3 mt-15">
+                                                    <div class="float-right" style="float: right;">
+                                                        <button class="mat-raised-button mat-accent" color="accent"
+                                                            class="d-inline" mat-raised-button="" type="submit"
+                                                            [disabled]="addDriveChecklistFormGroup.invalid" *ngIf="save">
+                                                            {{title}}
+                                                        </button>
+                                                        <button class="mat-raised-button mat-accent  d-inline"
+                                                            color="accent"
+                                                            mat-raised-button="" *ngIf="update">
+                                                            {{title}}
+                                                        </button>&nbsp;&nbsp;
+                                                        <span class="mat-raised-button mat-accent d-inline"
+                                                            (click)="onGoBack()" color="warn" mat-raised-button="">
+                                                            Back
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

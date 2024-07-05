@@ -1,0 +1,11 @@
+.box {
+  width: 3px;
+  height: 5px;
+  padding: 3px;
+  border: 1px solid black;
+}
+.jobCardIdBox{
+	width: 10px;
+  	height: 5px;
+  	padding: 3px;
+}
